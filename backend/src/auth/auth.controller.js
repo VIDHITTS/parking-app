@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
-import supabase from '../services/supabase.js';
-import { generateToken } from '../middleware/auth.js';
+import supabase from '../shared/config/supabase.config.js';
+import { generateToken } from '../shared/middleware/auth.middleware.js';
 
 const SALT_ROUNDS = 10;
 

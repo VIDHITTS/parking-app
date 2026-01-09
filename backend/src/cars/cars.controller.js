@@ -1,4 +1,4 @@
-import supabase from '../services/supabase.js';
+import supabase from '../shared/config/supabase.config.js';
 
 export const addCar = async (req, res) => {
     try {

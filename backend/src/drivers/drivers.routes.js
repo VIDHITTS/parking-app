@@ -1,5 +1,5 @@
 import express from 'express';
-import { addDriver, getAllDrivers, getDriverById } from '../controllers/driverController.js';
+import { addDriver, getAllDrivers, getDriverById } from './drivers.controller.js';
 
 const router = express.Router();
 
