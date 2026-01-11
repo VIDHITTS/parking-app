@@ -1,34 +1,42 @@
 # Parking Management App - Development Tasks
 
 ## Backend Development
-- [/] Initialize backend project structure
-- [ ] Set up Express server
-- [ ] Configure Supabase connection
-- [ ] Implement authentication (JWT)
-- [ ] Create auth controllers and routes
-- [ ] Create driver management controllers
-- [ ] Create car management controllers
-- [ ] Create parking management controllers
-- [ ] Create admin controllers
-- [ ] Add middleware for auth
+- [x] Initialize backend project structure
+- [x] Set up Express server
+- [x] Configure Supabase connection
+- [x] Implement authentication (JWT)
+- [x] Create auth controllers and routes
+- [x] Create driver management controllers
+- [x] Create car management controllers
+- [x] Create parking management controllers
+- [x] Create admin controllers
+- [x] Add middleware for auth
 - [ ] Test backend APIs
+- [ ] Deploy backend to Render
 
 ## Frontend Development
-- [ ] Initialize React + Vite project
-- [ ] Set up routing (React Router)
-- [ ] Create authentication context
-- [ ] Build login/signup pages
-- [ ] Build home dashboard
-- [ ] Build driver management page
-- [ ] Build car management page
-- [ ] Build parking history page
-- [ ] Build admin dashboard
+- [x] Initialize React + Vite project
+- [x] Set up routing (React Router)
+- [x] Create authentication context
+- [x] Build login/signup pages
+- [x] Build home dashboard
+- [x] Build driver management page
+- [x] Build car management page
+- [x] Build parking history page
+- [x] Build admin dashboard
 - [ ] Implement QR code scanning
-- [ ] Styling and responsive design
+- [x] Styling and responsive design
+- [ ] Deploy frontend to Vercel
+
+## Database
+- [ ] Set up Supabase database
+- [ ] Create database tables
+- [ ] Set up database policies
 
 ## Deployment
 - [ ] Deploy backend to Render
-- [ ] Set up Supabase database
 - [ ] Deploy frontend to Vercel
+- [ ] Configure environment variables
 - [ ] Test live application
 - [ ] Submit assignment
+
