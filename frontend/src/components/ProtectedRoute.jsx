@@ -19,4 +19,26 @@ const ProtectedRoute = ({ children }) => {
     return children;
 };
 
+export const RoleRoute = ({ children, allowedRoles = [] }) => {
+    const { isAuthenticated, user, loading } = useAuth();
+
+    if (loading) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                <p>Loading...</p>
+            </div>
+        );
+    }
+
+    if (!isAuthenticated) {
+        return <Navigate to="/login" replace />;
+    }
+
+    if (!allowedRoles.includes(user?.role)) {
+        return <Navigate to="/home" replace />;
+    }
+
+    return children;
+};
+
 export default ProtectedRoute;

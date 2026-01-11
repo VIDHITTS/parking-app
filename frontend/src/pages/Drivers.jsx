@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Navbar from '../components/Navbar';
+import Header from '../components/Header';
 import { driverService } from '../services/api';
 
 function Drivers() {
@@ -39,17 +39,16 @@ function Drivers() {
 
     return (
         <div>
-            <Navbar />
+            <Header title="Drivers" description="Manage driver information" />
             <div className="container">
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <h1>Drivers</h1>
-                    <button onClick={() => setShowForm(!showForm)} className="btn-primary" style={{ width: 'auto', padding: '10px 20px' }}>
+                <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '20px' }}>
+                    <button onClick={() => setShowForm(!showForm)} className="btn-primary">
                         {showForm ? 'Cancel' : '+ Add Driver'}
                     </button>
                 </div>
 
                 {showForm && (
-                    <div className="action-card" style={{ marginTop: '20px' }}>
+                    <div className="action-card" style={{ marginBottom: '30px' }}>
                         <h3>Add New Driver</h3>
                         <form onSubmit={handleSubmit}>
                             <div className="form-group">
@@ -77,7 +76,7 @@ function Drivers() {
                     </div>
                 )}
 
-                <div className="parking-list" style={{ marginTop: '30px' }}>
+                <div className="parking-list">
                     {drivers.map((driver) => (
                         <div key={driver.id} className="parking-card">
                             <h4>{driver.name}</h4>

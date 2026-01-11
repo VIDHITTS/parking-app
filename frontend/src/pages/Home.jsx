@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Navbar from '../components/Navbar';
+import Header from '../components/Header';
 import { parkingService } from '../services/api';
 
 function Home() {
@@ -23,16 +23,13 @@ function Home() {
 
     return (
         <div>
-            <Navbar />
+            <Header title="Dashboard" description="Manage parking operations and view insights" />
             <div className="container">
-                <h1>Dashboard</h1>
-
                 <div className="actions">
                     <div className="action-card">
                         <h3>Quick Actions</h3>
                         <button className="btn-primary">Scan QR to Park</button>
-                        <button className="btn-secondary">Add New Driver</button>
-                        <button className="btn-secondary">Add New Car</button>
+                        <button className="btn-secondary">Add New Parking</button>
                     </div>
                 </div>
 

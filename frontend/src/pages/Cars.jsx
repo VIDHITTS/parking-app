@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Navbar from '../components/Navbar';
+import Header from '../components/Header';
 import { carService, driverService } from '../services/api';
 
 function Cars() {
@@ -50,17 +50,16 @@ function Cars() {
 
     return (
         <div>
-            <Navbar />
+            <Header title="Cars" description="Manage vehicle information" />
             <div className="container">
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <h1>Cars</h1>
-                    <button onClick={() => setShowForm(!showForm)} className="btn-primary" style={{ width: 'auto', padding: '10px 20px' }}>
+                <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '20px' }}>
+                    <button onClick={() => setShowForm(!showForm)} className="btn-primary">
                         {showForm ? 'Cancel' : '+ Add Car'}
                     </button>
                 </div>
 
                 {showForm && (
-                    <div className="action-card" style={{ marginTop: '20px' }}>
+                    <div className="action-card" style={{ marginBottom: '30px' }}>
                         <h3>Add New Car</h3>
                         <form onSubmit={handleSubmit}>
                             <div className="form-group">
@@ -105,7 +104,7 @@ function Cars() {
                     </div>
                 )}
 
-                <div className="parking-list" style={{ marginTop: '30px' }}>
+                <div className="parking-list">
                     {cars.map((car) => (
                         <div key={car.id} className="parking-card">
                             <h4>{car.car_name}</h4>

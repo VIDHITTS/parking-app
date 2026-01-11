@@ -121,14 +121,6 @@ button:disabled {
   margin-bottom: 20px;
 }
 
-.info-box {
-  background: #dbeafe;
-  padding: 12px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  font-size: 14px;
-}
-
 .auth-link {
   text-align: center;
   margin-top: 20px;
@@ -152,6 +144,7 @@ button:disabled {
 
 .nav-brand h2 {
   color: var(--primary-color);
+  cursor: pointer;
 }
 
 .nav-links {
@@ -164,22 +157,54 @@ button:disabled {
   color: var(--text-primary);
   text-decoration: none;
   font-weight: 500;
-  transition: color 0.3s;
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: all 0.3s;
 }
 
-.nav-links a:hover {
+.nav-links a:hover,
+.nav-links a.active {
   color: var(--primary-color);
+  background: #f3f4f6;
 }
 
-.user-info {
+.role-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.role-badge.admin {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.role-badge.manager {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.page-header {
+  background: var(--card-bg);
+  padding: 30px;
+  margin-bottom: 30px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.page-header h1 {
+  color: var(--primary-color);
+  margin-bottom: 8px;
+}
+
+.page-header p {
   color: var(--text-secondary);
-  font-size: 14px;
 }
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 20px;
 }
 
 .actions {
@@ -207,6 +232,10 @@ button:disabled {
   margin-top: 40px;
 }
 
+.recent-section h2 {
+  margin-bottom: 20px;
+}
+
 .parking-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -224,6 +253,10 @@ button:disabled {
 .parking-card h4 {
   color: var(--primary-color);
   margin-bottom: 10px;
+}
+
+.parking-card h2 {
+  margin: 10px 0;
 }
 
 .parking-card p {

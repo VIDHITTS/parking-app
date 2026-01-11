@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Navbar from '../components/Navbar';
+import Header from '../components/Header';
 import { parkingService } from '../services/api';
 
 function History() {
@@ -33,16 +33,14 @@ function History() {
 
     return (
         <div>
-            <Navbar />
+            <Header title="Parking History" description="View all parking records" />
             <div className="container">
-                <h1>Parking History</h1>
-
                 {loading ? (
                     <p>Loading...</p>
                 ) : parkings.length === 0 ? (
                     <p>No parking records found</p>
                 ) : (
-                    <div className="parking-list" style={{ marginTop: '30px' }}>
+                    <div className="parking-list">
                         {parkings.map((parking) => (
                             <div key={parking.id} className="parking-card">
                                 <h4>{parking.cars?.car_name} - {parking.cars?.car_number}</h4>

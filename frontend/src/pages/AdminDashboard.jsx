@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Navbar from '../components/Navbar';
+import Header from '../components/Header';
 import { adminService } from '../services/api';
 
 function AdminDashboard() {
@@ -24,7 +24,7 @@ function AdminDashboard() {
     if (loading) {
         return (
             <div>
-                <Navbar />
+                <Header title="Admin Dashboard" description="View system analytics and insights" />
                 <div className="container">
                     <p>Loading...</p>
                 </div>
@@ -34,11 +34,9 @@ function AdminDashboard() {
 
     return (
         <div>
-            <Navbar />
+            <Header title="Admin Dashboard" description="View system analytics and insights" />
             <div className="container">
-                <h1>Admin Dashboard</h1>
-
-                <div className="parking-list" style={{ marginTop: '30px' }}>
+                <div className="parking-list">
                     <div className="parking-card" style={{ background: '#dbeafe' }}>
                         <h4>Total Collection</h4>
                         <h2 style={{ color: '#1e40af' }}>₹{insights?.totalCollection || 0}</h2>
