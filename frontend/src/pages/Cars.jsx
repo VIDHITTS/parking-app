@@ -53,18 +53,24 @@ function Cars() {
                 <div className="subtitle">Manage vehicle information</div>
             </div>
 
-            <div className="content-area">
+            <div className="content-area" style={{ paddingTop: '20px' }}>
                 <button
                     onClick={() => setShowForm(!showForm)}
                     className="btn-primary"
-                    style={{ marginBottom: '20px' }}
+                    style={{ marginBottom: '24px' }}
                 >
-                    {showForm ? 'Cancel' : '+ Add Car'}
+                    {showForm ? '✕ Cancel' : '+ Add Car'}
                 </button>
 
                 {showForm && (
-                    <div style={{ background: '#f9fafb', padding: '20px', borderRadius: '16px', marginBottom: '20px' }}>
-                        <h3 style={{ marginBottom: '16px' }}>Add New Car</h3>
+                    <div style={{
+                        background: '#f9fafb',
+                        padding: '20px',
+                        borderRadius: '16px',
+                        marginBottom: '24px',
+                        border: '1px solid #e5e7eb'
+                    }}>
+                        <h3 style={{ marginBottom: '16px', fontSize: '16px' }}>Add New Car</h3>
                         <form onSubmit={handleSubmit}>
                             <div className="form-group">
                                 <label>Select Driver</label>
@@ -108,18 +114,27 @@ function Cars() {
                     </div>
                 )}
 
-                {cars.map((car) => (
-                    <div key={car.id} className="parking-card">
-                        <h3>🚗 {car.car_name}</h3>
-                        <div className="parking-location">
-                            <span>🔢</span>
-                            <span>{car.car_number}</span>
-                        </div>
-                        <div style={{ marginTop: '8px', fontSize: '13px', color: '#6b7280' }}>
-                            Driver: {car.drivers?.name} • {car.drivers?.phone}
-                        </div>
+                {cars.length === 0 ? (
+                    <div className="empty-state">
+                        <p>No cars yet</p>
+                        <p style={{ fontSize: '13px', marginTop: '8px' }}>Add your first car to get started</p>
                     </div>
-                ))}
+                ) : (
+                    <div>
+                        {cars.map((car) => (
+                            <div key={car.id} className="parking-card">
+                                <h3 style={{ fontSize: '16px', marginBottom: '8px' }}>🚗 {car.car_name}</h3>
+                                <div className="parking-location">
+                                    <span>🔢</span>
+                                    <span>{car.car_number}</span>
+                                </div>
+                                <div style={{ marginTop: '8px', fontSize: '13px', color: '#6b7280' }}>
+                                    Driver: {car.drivers?.name} • {car.drivers?.phone}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
         </div>
     );
