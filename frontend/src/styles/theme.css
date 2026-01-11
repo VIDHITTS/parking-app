@@ -97,29 +97,38 @@ body {
 
 /* Scan and Parking Cards (no changes needed) */
 
-/* Content Area - General */
+/* Content Area */
 .content-area {
-  padding: 0 16px 80px;
-  /* Big bottom padding for nav */
+  padding: 0 16px 90px;
   flex: 1;
-  /* Take up remaining space */
+  overflow-y: auto;
+  /* Hide scrollbar */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.content-area::-webkit-scrollbar {
+  display: none;
 }
 
 /* Bottom Navigation */
 .bottom-nav {
   position: absolute;
-  /* Absolute inside .app-wrapper */
   bottom: 0;
   left: 0;
   right: 0;
+  height: 70px;
+  /* Fixed height to ensure stability */
   background: var(--white);
   border-top: 1px solid var(--border);
   display: flex;
   justify-content: space-around;
-  padding: 12px 0 20px;
-  /* Extra padding for bottom aesthetic */
+  padding: 10px 0;
   z-index: 100;
-  /* Ensure it sits on top of scrolling content */
+  /* Clip any border radius issues */
+  border-bottom-left-radius: 28px;
+  /* Match container minus border width approx */
+  border-bottom-right-radius: 28px;
 }
 
 /* No desktop specific override needed for .bottom-nav width/position 
