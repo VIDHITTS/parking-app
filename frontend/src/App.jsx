@@ -15,57 +15,59 @@ function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Navigate to="/login" replace />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
+        <div className="app-wrapper">
+          <Routes>
+            <Route path="/" element={<Navigate to="/login" replace />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
 
-          <Route
-            path="/home"
-            element={
-              <ProtectedRoute>
-                <Home />
-              </ProtectedRoute>
-            }
-          />
+            <Route
+              path="/home"
+              element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              }
+            />
 
-          <Route
-            path="/drivers"
-            element={
-              <ProtectedRoute>
-                <Drivers />
-              </ProtectedRoute>
-            }
-          />
+            <Route
+              path="/drivers"
+              element={
+                <ProtectedRoute>
+                  <Drivers />
+                </ProtectedRoute>
+              }
+            />
 
-          <Route
-            path="/cars"
-            element={
-              <ProtectedRoute>
-                <Cars />
-              </ProtectedRoute>
-            }
-          />
+            <Route
+              path="/cars"
+              element={
+                <ProtectedRoute>
+                  <Cars />
+                </ProtectedRoute>
+              }
+            />
 
-          <Route
-            path="/history"
-            element={
-              <ProtectedRoute>
-                <History />
-              </ProtectedRoute>
-            }
-          />
+            <Route
+              path="/history"
+              element={
+                <ProtectedRoute>
+                  <History />
+                </ProtectedRoute>
+              }
+            />
 
-          <Route
-            path="/admin"
-            element={
-              <ProtectedRoute>
-                <AdminDashboard />
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
-        <BottomNav />
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute>
+                  <AdminDashboard />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+          <BottomNav />
+        </div>
       </BrowserRouter>
     </AuthProvider>
   );
