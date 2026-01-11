@@ -8,64 +8,43 @@ CREATE TABLE users (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Create Drivers table
+-- Create Drivers (Valets) table
 CREATE TABLE drivers (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name TEXT NOT NULL,
   phone TEXT NOT NULL,
+  status TEXT DEFAULT 'Available' CHECK (status IN ('Available', 'Busy', 'Offline')),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Create Cars table
-CREATE TABLE cars (
+-- Create Parking Sessions table (Replacing old 'parkings' and 'cars' strict link)
+CREATE TABLE parking_sessions (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  driver_id UUID REFERENCES drivers(id) ON DELETE CASCADE,
-  car_name TEXT NOT NULL,
-  car_number TEXT NOT NULL,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
+  
+  -- Vehicle Details (Directly stored for speed)
+  vehicle_number TEXT NOT NULL,
+  vehicle_model TEXT,
+  customer_name TEXT,
+  customer_phone TEXT,
 
--- Create Parkings table
-CREATE TABLE parkings (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  car_id UUID REFERENCES cars(id) ON DELETE CASCADE,
-  location TEXT NOT NULL,
-  city TEXT NOT NULL,
-  parking_date DATE NOT NULL,
-  duration_minutes INTEGER NOT NULL,
-  fee NUMERIC(10, 2) NOT NULL,
+  -- Operations
+  status TEXT NOT NULL DEFAULT 'Parked' CHECK (status IN ('Parked', 'Retrieving', 'Completed')),
+  valet_id UUID REFERENCES drivers(id), -- Who parked it
+  
+  -- Location & Time
+  location TEXT DEFAULT 'Main Garage',
+  entry_time TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  exit_time TIMESTAMP WITH TIME ZONE,
+  
+  -- Financials
+  fee NUMERIC(10, 2) DEFAULT 0,
   is_paid BOOLEAN DEFAULT FALSE,
+  payment_method TEXT CHECK (payment_method IN ('Cash', 'UPI', 'Card')),
+
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Create indexes for better query performance
-CREATE INDEX idx_cars_driver_id ON cars(driver_id);
-CREATE INDEX idx_parkings_car_id ON parkings(car_id);
-CREATE INDEX idx_parkings_is_paid ON parkings(is_paid);
-CREATE INDEX idx_users_email ON users(email);
-
--- Enable Row Level Security (RLS) - Optional but recommended
-ALTER TABLE users ENABLE ROW LEVEL SECURITY;
-ALTER TABLE drivers ENABLE ROW LEVEL SECURITY;
-ALTER TABLE cars ENABLE ROW LEVEL SECURITY;
-ALTER TABLE parkings ENABLE ROW LEVEL SECURITY;
-
--- Create policies (adjust based on your security requirements)
--- For this assignment, we'll use simple policies
-
--- Allow all authenticated users to read/write their own data
-CREATE POLICY "Enable read access for authenticated users" 
-ON users FOR SELECT 
-USING (true);
-
-CREATE POLICY "Enable all access for authenticated users on drivers"
-ON drivers FOR ALL
-USING (true);
-
-CREATE POLICY "Enable all access for authenticated users on cars"
-ON cars FOR ALL
-USING (true);
-
-CREATE POLICY "Enable all access for authenticated users on parkings"
-ON parkings FOR ALL
-USING (true);
+-- Create indexes
+CREATE INDEX idx_parking_status ON parking_sessions(status);
+CREATE INDEX idx_parking_vehicle ON parking_sessions(vehicle_number);
+CREATE INDEX idx_parking_valet ON parking_sessions(valet_id);
