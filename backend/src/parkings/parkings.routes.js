@@ -1,20 +1,16 @@
 import express from 'express';
 import {
-    createParking,
-    getAllParkings,
-    getParkingsByCarId,
-    markParkingAsPaid,
-    getParkingById,
-    deleteParking
+    getStats,
+    createSession,
+    getAllSessions,
+    updateStatus
 } from './parkings.controller.js';
 
 const router = express.Router();
 
-router.post('/', createParking);
-router.get('/', getAllParkings);
-router.get('/car/:car_id', getParkingsByCarId);
-router.get('/:id', getParkingById);
-router.patch('/:id/pay', markParkingAsPaid);
-router.delete('/:id', deleteParking);
+router.get('/stats', getStats);
+router.post('/', createSession);
+router.get('/', getAllSessions);
+router.patch('/:id/status', updateStatus);
 
 export default router;

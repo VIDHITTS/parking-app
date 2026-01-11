@@ -34,7 +34,7 @@ function Signup() {
   };
 
   return (
-    <div className="app-wrapper">
+    <>
       <div className="auth-container">
         <div className="auth-header">
           <h1>Smart Parking</h1>
@@ -73,8 +73,9 @@ function Signup() {
                 value={formData.role}
                 onChange={(e) => setFormData({ ...formData, role: e.target.value })}
               >
+                <option value="USER">User (Driver)</option>
                 <option value="MANAGER">Manager</option>
-                <option value="ADMIN">Admin</option>
+                <option value="SUPER_ADMIN">Super Admin</option>
               </select>
             </div>
 
@@ -84,7 +85,11 @@ function Signup() {
                 type="password"
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                placeholder={formData.role === 'ADMIN' ? 'admin123' : 'manager123'}
+                placeholder={
+                  formData.role === 'SUPER_ADMIN' ? 'admin123' :
+                    formData.role === 'MANAGER' ? 'manager123' :
+                      'Create a password'
+                }
                 required
               />
             </div>
@@ -100,11 +105,11 @@ function Signup() {
 
           <div style={{ marginTop: '20px', padding: '12px', background: '#f9fafb', borderRadius: '12px', fontSize: '12px' }}>
             <div><strong>Manager password:</strong> manager123</div>
-            <div><strong>Admin password:</strong> admin123</div>
+            <div><strong>Super Admin password:</strong> admin123</div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

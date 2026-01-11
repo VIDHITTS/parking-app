@@ -6,6 +6,7 @@ import driverRoutes from './drivers/drivers.routes.js';
 import carRoutes from './cars/cars.routes.js';
 import parkingRoutes from './parkings/parkings.routes.js';
 import adminRoutes from './admin/admin.routes.js';
+import sitesRoutes from './sites/sites.routes.js';
 import { verifyToken } from './shared/middleware/auth.middleware.js';
 
 dotenv.config();

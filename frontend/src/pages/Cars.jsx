@@ -47,7 +47,7 @@ function Cars() {
     };
 
     return (
-        <div className="app-wrapper">
+        <>
             <div className="hero-header">
                 <h1>Cars</h1>
                 <div className="subtitle">Manage vehicle information</div>
@@ -136,7 +136,7 @@ function Cars() {
                     </div>
                 )}
             </div>
-        </div>
+        </>
     );
 }
 

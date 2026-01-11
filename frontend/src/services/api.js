@@ -29,17 +29,29 @@ export const adminService = {
 };
 
 export const parkingService = {
+    getStats: () => api.get('/parkings/stats'),
+    createSession: (data) => api.post('/parkings', data),
+    getAllSessions: () => api.get('/parkings'),
+    updateStatus: (id, status) => api.patch(`/parkings/${id}/status`, { status }),
+    // Legacy support if needed, but we are pivoting
     createParking: (data) => api.post('/parkings', data),
     getAllParkings: () => api.get('/parkings'),
-    getParkingsByCarId: (carId) => api.get(`/parkings/car/${carId}`),
-    markAsPaid: (id) => api.patch(`/parkings/${id}/pay`),
-    deleteParking: (id) => api.delete(`/parkings/${id}`),
 };
 
 export const driverService = {
+    getAllDrivers: (siteId) => api.get(`/drivers${siteId ? `?site_id=${siteId}` : ''}`),
     addDriver: (data) => api.post('/drivers', data),
-    getAllDrivers: () => api.get('/drivers'),
-    getDriverById: (id) => api.get(`/drivers/${id}`),
+    // Approval Workflow
+    requestApproval: (data) => api.post('/drivers/request-approval', data),
+    getPending: () => api.get('/drivers/pending'),
+    approve: (id, reviewerId) => api.patch(`/drivers/approve/${id}`, { reviewed_by: reviewerId }),
+    reject: (id, reviewerId, notes) => api.patch(`/drivers/reject/${id}`, { reviewed_by: reviewerId, review_notes: notes }),
+};
+
+export const sitesService = {
+    getAll: () => api.get('/sites'),
+    create: (data) => api.post('/sites', data),
+    toggleStatus: (id, isActive) => api.patch(`/sites/${id}/status`, { is_active: isActive }),
 };
 
 export const carService = {

@@ -30,7 +30,7 @@ function Login() {
   };
 
   return (
-    <div className="app-wrapper">
+    <>
       <div className="auth-container">
         <div className="auth-header">
           <h1>Smart Parking</h1>
@@ -78,7 +78,7 @@ function Login() {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

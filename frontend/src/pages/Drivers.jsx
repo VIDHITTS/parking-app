@@ -36,7 +36,7 @@ function Drivers() {
     };
 
     return (
-        <div className="app-wrapper">
+        <>
             <div className="hero-header">
                 <h1>Drivers</h1>
                 <div className="subtitle">Manage driver information</div>
@@ -110,7 +110,7 @@ function Drivers() {
                     </div>
                 )}
             </div>
-        </div>
+        </>
     );
 }
 

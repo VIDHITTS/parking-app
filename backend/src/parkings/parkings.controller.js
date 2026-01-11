@@ -1,154 +1,121 @@
 import supabase from '../shared/config/supabase.config.js';
 
-export const createParking = async (req, res) => {
+// Get generic stats for dashboard
+export const getStats = async (req, res) => {
     try {
-        const { car_id, location, city, parking_date, duration_minutes, fee } = req.body;
+        // Active Sessions (Parked)
+        const { count: activeCount } = await supabase
+            .from('parking_sessions')
+            .select('*', { count: 'exact', head: true })
+            .eq('status', 'Parked');
 
-        if (!car_id || !location || !city || !parking_date || !duration_minutes || !fee) {
-            return res.status(400).json({
-                error: 'All fields are required: car_id, location, city, parking_date, duration_minutes, fee',
-            });
-        }
+        // Retrieving Sessions
+        const { count: retrievingCount } = await supabase
+            .from('parking_sessions')
+            .select('*', { count: 'exact', head: true })
+            .eq('status', 'Retrieving');
 
-        const { data: car, error: carError } = await supabase
-            .from('cars')
-            .select('id')
-            .eq('id', car_id)
-            .single();
+        // Revenue (Sum of paid sessions today)
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
 
-        if (carError || !car) {
-            return res.status(404).json({ error: 'Car not found' });
-        }
+        const { data: todayRevenue } = await supabase
+            .from('parking_sessions')
+            .select('fee')
+            .eq('is_paid', true)
+            .gte('created_at', today.toISOString());
 
-        const { data, error } = await supabase
-            .from('parkings')
-            .insert([
-                {
-                    car_id,
-                    location,
-                    city,
-                    parking_date,
-                    duration_minutes,
-                    fee,
-                    is_paid: false,
-                },
-            ])
-            .select();
-
-        if (error) {
-            return res.status(500).json({ error: error.message });
-        }
-
-        res.status(201).json({
-            message: 'Parking entry created successfully',
-            parking: data[0],
-        });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
-
-export const getAllParkings = async (req, res) => {
-    try {
-        const { data, error } = await supabase
-            .from('parkings')
-            .select(
-                '*, cars(car_name, car_number, drivers(name, phone))'
-            )
-            .order('created_at', { ascending: false });
-
-        if (error) {
-            return res.status(500).json({ error: error.message });
-        }
-
-        res.json({ parkings: data });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
-
-export const getParkingsByCarId = async (req, res) => {
-    try {
-        const { car_id } = req.params;
-
-        const { data, error } = await supabase
-            .from('parkings')
-            .select('*')
-            .eq('car_id', car_id)
-            .order('created_at', { ascending: false });
-
-        if (error) {
-            return res.status(500).json({ error: error.message });
-        }
-
-        res.json({ parkings: data });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
-
-export const markParkingAsPaid = async (req, res) => {
-    try {
-        const { id } = req.params;
-
-        const { data, error } = await supabase
-            .from('parkings')
-            .update({ is_paid: true })
-            .eq('id', id)
-            .select();
-
-        if (error) {
-            return res.status(500).json({ error: error.message });
-        }
-
-        if (data.length === 0) {
-            return res.status(404).json({ error: 'Parking not found' });
-        }
+        const totalRevenue = todayRevenue ? todayRevenue.reduce((sum, item) => sum + (Number(item.fee) || 0), 0) : 0;
 
         res.json({
-            message: 'Parking marked as paid',
-            parking: data[0],
+            success: true,
+            stats: {
+                active: activeCount || 0,
+                retrieving: retrievingCount || 0, // Using retrieving count as placeholder for "Waitlist" concept
+                revenue: totalRevenue
+            }
         });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ success: false, error: error.message });
     }
 };
 
-export const getParkingById = async (req, res) => {
+export const createSession = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { vehicle_number, vehicle_model, customer_name, customer_phone, valet_id, location } = req.body;
 
         const { data, error } = await supabase
-            .from('parkings')
-            .select('*, cars(car_name, car_number, drivers(name, phone))')
-            .eq('id', id)
+            .from('parking_sessions')
+            .insert([
+                {
+                    vehicle_number,
+                    vehicle_model,
+                    customer_name,
+                    customer_phone,
+                    valet_id,
+                    location: location || 'Main Garage',
+                    status: 'Parked',
+                    fee: 100, // Default fee
+                    entry_time: new Date().toISOString()
+                }
+            ])
+            .select()
             .single();
 
-        if (error) {
-            return res.status(404).json({ error: 'Parking not found' });
-        }
+        if (error) throw error;
 
-        res.json({ parking: data });
+        res.status(201).json({ success: true, session: data });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ success: false, error: error.message });
     }
 };
 
-export const deleteParking = async (req, res) => {
+export const getAllSessions = async (req, res) => {
+    try {
+        // Join with drivers to get valet name
+        const { data, error } = await supabase
+            .from('parking_sessions')
+            .select(`
+        *,
+        drivers!parking_sessions_valet_id_fkey (
+          id,
+          name,
+          phone
+        )
+      `)
+            .order('created_at', { ascending: false });
+
+        // Note: If join fails due to missing FK in Supabase yet, frontend will just show N/A
+        if (error) throw error;
+
+        res.json({ success: true, sessions: data });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+};
+
+export const updateStatus = async (req, res) => {
     try {
         const { id } = req.params;
+        const { status } = req.body; // 'Retrieving' or 'Completed'
 
-        const { error } = await supabase
-            .from('parkings')
-            .delete()
-            .eq('id', id);
-
-        if (error) {
-            return res.status(500).json({ error: error.message });
+        let updateData = { status };
+        if (status === 'Completed') {
+            updateData.exit_time = new Date().toISOString();
+            updateData.is_paid = true;
         }
 
-        res.json({ message: 'Parking deleted successfully' });
+        const { data, error } = await supabase
+            .from('parking_sessions')
+            .update(updateData)
+            .eq('id', id)
+            .select()
+            .single();
+
+        if (error) throw error;
+
+        res.json({ success: true, session: data });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ success: false, error: error.message });
     }
 };

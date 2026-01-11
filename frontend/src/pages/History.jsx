@@ -21,7 +21,7 @@ function History() {
     };
 
     return (
-        <div className="app-wrapper">
+        <>
             <div className="hero-header">
                 <h1>Parking History</h1>
                 <div className="subtitle">All your parking records</div>
@@ -92,7 +92,7 @@ function History() {
                     </div>
                 )}
             </div>
-        </div>
+        </>
     );
 }
 

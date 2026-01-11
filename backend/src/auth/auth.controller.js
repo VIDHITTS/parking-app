@@ -5,7 +5,7 @@ import { generateToken } from '../shared/middleware/auth.middleware.js';
 const SALT_ROUNDS = 10;
 
 const ROLE_PASSWORDS = {
-    ADMIN: 'admin123',
+    SUPER_ADMIN: 'admin123', // Keeping same password for simplicity
     MANAGER: 'manager123',
 };
 
@@ -19,16 +19,19 @@ export const signup = async (req, res) => {
             });
         }
 
-        const validRoles = ['ADMIN', 'MANAGER'];
-        if (!validRoles.includes(role.toUpperCase())) {
+        const validRoles = ['SUPER_ADMIN', 'MANAGER', 'USER'];
+        // Supporting 'ADMIN' for backward compatibility if needed, but primary is SUPER_ADMIN
+        if (!validRoles.includes(role.toUpperCase()) && role.toUpperCase() !== 'ADMIN') {
             return res.status(400).json({
-                error: 'Invalid role. Must be ADMIN or MANAGER',
+                error: 'Invalid role. Must be SUPER_ADMIN, MANAGER or USER',
             });
         }
 
-        const upperRole = role.toUpperCase();
+        let upperRole = role.toUpperCase();
+        if (upperRole === 'ADMIN') upperRole = 'SUPER_ADMIN'; // Auto-migrate
 
-        if (password !== ROLE_PASSWORDS[upperRole]) {
+        // Only checking strict passwords for Admin/Manager to prevent unauthorized elevation
+        if (upperRole !== 'USER' && password !== ROLE_PASSWORDS[upperRole]) {
             return res.status(400).json({
                 error: `Invalid password for ${upperRole} role`,
             });

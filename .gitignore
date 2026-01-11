@@ -5,3 +5,5 @@ node_modules
 *.log
 dist
 build
+backend/test_workflow*.js
+database/update_db.sql

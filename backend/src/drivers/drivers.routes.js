@@ -1,10 +1,23 @@
 import express from 'express';
-import { addDriver, getAllDrivers, getDriverById } from './drivers.controller.js';
+import {
+    getAllDrivers,
+    addDriver,
+    requestApproval,
+    getPendingDrivers,
+    approveDriver,
+    rejectDriver
+} from './drivers.controller.js';
 
 const router = express.Router();
 
-router.post('/', addDriver);
+// Active Drivers
 router.get('/', getAllDrivers);
-router.get('/:id', getDriverById);
+router.post('/', addDriver); // Direct add (Legacy/SuperAdmin)
+
+// Approval Workflow
+router.post('/request-approval', requestApproval);
+router.get('/pending', getPendingDrivers);
+router.patch('/approve/:id', approveDriver);
+router.patch('/reject/:id', rejectDriver);
 
 export default router;

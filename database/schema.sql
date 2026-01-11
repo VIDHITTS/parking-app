@@ -1,5 +1,5 @@
 -- Create Users table
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name TEXT NOT NULL,
   email TEXT UNIQUE NOT NULL,
@@ -8,8 +8,8 @@ CREATE TABLE users (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Create Drivers (Valets) table
-CREATE TABLE drivers (
+-- Create Drivers table
+CREATE TABLE IF NOT EXISTS drivers (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name TEXT NOT NULL,
   phone TEXT NOT NULL,
@@ -17,11 +17,37 @@ CREATE TABLE drivers (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Create Parking Sessions table (Replacing old 'parkings' and 'cars' strict link)
-CREATE TABLE parking_sessions (
+-- Create Cars table (Original)
+CREATE TABLE IF NOT EXISTS cars (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  driver_id UUID REFERENCES drivers(id) ON DELETE CASCADE,
+  car_name TEXT NOT NULL,
+  car_number TEXT NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Create Parkings table (Original)
+CREATE TABLE IF NOT EXISTS parkings (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  car_id UUID REFERENCES cars(id) ON DELETE CASCADE,
+  location TEXT NOT NULL,
+  city TEXT NOT NULL,
+  parking_date DATE NOT NULL,
+  duration_minutes INTEGER NOT NULL,
+  fee NUMERIC(10, 2) NOT NULL,
+  is_paid BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- ==========================================
+-- NEW PARKING SESSIONS (Friend 2 Workflow)
+-- ==========================================
+
+-- Create Parking Sessions table
+CREATE TABLE IF NOT EXISTS parking_sessions (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   
-  -- Vehicle Details (Directly stored for speed)
+  -- Vehicle Details
   vehicle_number TEXT NOT NULL,
   vehicle_model TEXT,
   customer_name TEXT,
@@ -29,7 +55,7 @@ CREATE TABLE parking_sessions (
 
   -- Operations
   status TEXT NOT NULL DEFAULT 'Parked' CHECK (status IN ('Parked', 'Retrieving', 'Completed')),
-  valet_id UUID REFERENCES drivers(id), -- Who parked it
+  valet_id UUID REFERENCES drivers(id),
   
   -- Location & Time
   location TEXT DEFAULT 'Main Garage',
@@ -45,6 +71,18 @@ CREATE TABLE parking_sessions (
 );
 
 -- Create indexes
-CREATE INDEX idx_parking_status ON parking_sessions(status);
-CREATE INDEX idx_parking_vehicle ON parking_sessions(vehicle_number);
-CREATE INDEX idx_parking_valet ON parking_sessions(valet_id);
+CREATE INDEX IF NOT EXISTS idx_parking_status ON parking_sessions(status);
+CREATE INDEX IF NOT EXISTS idx_parking_vehicle ON parking_sessions(vehicle_number);
+
+-- RLS Policies
+ALTER TABLE users ENABLE ROW LEVEL SECURITY;
+ALTER TABLE drivers ENABLE ROW LEVEL SECURITY;
+ALTER TABLE cars ENABLE ROW LEVEL SECURITY;
+ALTER TABLE parkings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE parking_sessions ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Enable all access for authenticated users" ON users FOR ALL USING (true);
+CREATE POLICY "Enable all access for authenticated users" ON drivers FOR ALL USING (true);
+CREATE POLICY "Enable all access for authenticated users" ON cars FOR ALL USING (true);
+CREATE POLICY "Enable all access for authenticated users" ON parkings FOR ALL USING (true);
+CREATE POLICY "Enable all access for authenticated users" ON parking_sessions FOR ALL USING (true);
