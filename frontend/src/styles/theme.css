@@ -45,12 +45,20 @@ body {
 @media (min-width: 768px) {
   body {
     background: #e5e7eb;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
   }
 
   .app-wrapper {
     max-width: 430px;
     box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
-    border-radius: 0;
+    border: 12px solid #1f2937;
+    border-radius: 40px;
+    overflow: hidden;
+    min-height: 90vh;
   }
 }
 
@@ -59,7 +67,10 @@ body {
   background: var(--primary-gradient);
   padding: 20px 20px 28px;
   color: white;
-  border-radius: 0;
+  border: 12px solid #1f2937;
+    border-radius: 40px;
+    overflow: hidden;
+    min-height: 90vh;
 }
 
 .hero-header h1 {
@@ -400,7 +411,10 @@ body {
 /* Mobile-specific adjustments */
 @media (max-width: 767px) {
   .app-wrapper {
-    border-radius: 0;
+    border: 12px solid #1f2937;
+    border-radius: 40px;
+    overflow: hidden;
+    min-height: 90vh;
   }
 
   .content-area {
