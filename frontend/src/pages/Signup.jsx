@@ -42,11 +42,6 @@ function Signup() {
 
                 {error && <div className="error-message">{error}</div>}
 
-                <div className="info-box">
-                    <p><strong>Admin Password:</strong> admin123</p>
-                    <p><strong>Manager Password:</strong> manager123</p>
-                </div>
-
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label>Name</label>
