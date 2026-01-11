@@ -1,199 +1,111 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
-export default function Signup() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [role, setRole] = useState('MANAGER');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+function Signup() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    role: 'MANAGER',
+    password: ''
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const { signup } = useAuth();
   const navigate = useNavigate();
 
-  const requiredPassword = role === 'ADMIN' ? 'admin123' : 'manager123';
-  const isPasswordCorrect = password === requiredPassword;
-  const isPasswordsMatch = password === confirmPassword;
-
-  const handleSignup = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     setError('');
 
-    if (!name || !email || !password || !confirmPassword) {
-      setError('All fields are required');
-      return;
-    }
-
-    if (!isPasswordCorrect) {
-      setError(`Password must be "${requiredPassword}" for ${role} role`);
-      return;
-    }
-
-    if (!isPasswordsMatch) {
-      setError('Passwords do not match');
-      return;
-    }
-
-    setLoading(true);
-
     try {
-      const result = await signup(name, email, password, role);
-
+      const result = await signup(formData);
       if (result.success) {
-        if (result.user.role === 'ADMIN') {
-          navigate('/admin');
-        } else if (result.user.role === 'MANAGER') {
-          navigate('/home');
-        }
+        navigate('/home');
       } else {
-        setError(result.error || 'Signup failed. Please try again.');
+        setError(result.error || 'Signup failed');
       }
     } catch (err) {
-      setError('An error occurred. Please try again.');
-      console.error(err);
+      setError('An error occurred');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-card signup-card">
+    <div className="app-wrapper">
+      <div className="auth-container">
         <div className="auth-header">
-          <h1>Parking Manager</h1>
+          <h1>Smart Parking</h1>
           <p>Create your account</p>
         </div>
 
-        {error && <div className="alert alert-error">{error}</div>}
+        <div className="auth-content">
+          {error && <div className="alert-error">{error}</div>}
 
-        <form onSubmit={handleSignup} className="auth-form">
-          <div className="form-row">
+          <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label htmlFor="name">Name</label>
+              <label>Name</label>
               <input
                 type="text"
-                id="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="John Doe"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                placeholder="Your name"
                 required
               />
             </div>
 
             <div className="form-group">
-              <label htmlFor="email">Email</label>
+              <label>Email</label>
               <input
                 type="email"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 placeholder="your@email.com"
                 required
               />
             </div>
-          </div>
 
-          <div className="form-group">
-            <label>Role</label>
-            <div className="role-selection">
-              <label className={`role-option ${role === 'ADMIN' ? 'selected' : ''}`}>
-                <input
-                  type="radio"
-                  name="role"
-                  value="ADMIN"
-                  checked={role === 'ADMIN'}
-                  onChange={(e) => setRole(e.target.value)}
-                />
-                <div className="role-content">
-                  <div className="role-title">Admin</div>
-                  <div className="role-description">Analytics Only</div>
-                </div>
-              </label>
-
-              <label className={`role-option ${role === 'MANAGER' ? 'selected' : ''}`}>
-                <input
-                  type="radio"
-                  name="role"
-                  value="MANAGER"
-                  checked={role === 'MANAGER'}
-                  onChange={(e) => setRole(e.target.value)}
-                />
-                <div className="role-content">
-                  <div className="role-title">Manager</div>
-                  <div className="role-description">Operations</div>
-                </div>
-              </label>
+            <div className="form-group">
+              <label>Role</label>
+              <select
+                value={formData.role}
+                onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+              >
+                <option value="MANAGER">Manager</option>
+                <option value="ADMIN">Admin</option>
+              </select>
             </div>
+
+            <div className="form-group">
+              <label>Password</label>
+              <input
+                type="password"
+                value={formData.password}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                placeholder={formData.role === 'ADMIN' ? 'admin123' : 'manager123'}
+                required
+              />
+            </div>
+
+            <button type="submit" className="btn-primary" disabled={loading}>
+              {loading ? 'Creating account...' : 'Sign Up'}
+            </button>
+          </form>
+
+          <div className="auth-link">
+            Already have an account? <Link to="/login">Sign In</Link>
           </div>
 
-          <div className="form-group">
-            <label htmlFor="password">Password (Must be "{requiredPassword}")</label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder={requiredPassword}
-              className={password ? (isPasswordCorrect ? 'valid' : 'invalid') : ''}
-              required
-            />
-            {password && (
-              <div className={`validation-message ${isPasswordCorrect ? 'valid' : 'invalid'}`}>
-                {isPasswordCorrect ? 'Password correct' : 'Password incorrect'}
-              </div>
-            )}
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="confirmPassword">Confirm Password</label>
-            <input
-              type="password"
-              id="confirmPassword"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="Re-enter password"
-              className={confirmPassword ? (isPasswordsMatch ? 'valid' : 'invalid') : ''}
-              required
-            />
-            {confirmPassword && (
-              <div className={`validation-message ${isPasswordsMatch ? 'valid' : 'invalid'}`}>
-                {isPasswordsMatch ? 'Passwords match' : 'Passwords do not match'}
-              </div>
-            )}
-          </div>
-
-          <button
-            type="submit"
-            className="btn btn-primary btn-lg"
-            disabled={loading || !isPasswordCorrect || !isPasswordsMatch}
-          >
-            {loading ? 'Creating Account...' : 'Create Account'}
-          </button>
-        </form>
-
-        <div className="auth-footer">
-          <p>
-            Already have an account?{' '}
-            <Link to="/login" className="auth-link">
-              Sign In
-            </Link>
-          </p>
-        </div>
-
-        <div className="demo-credentials">
-          <h4>Required Passwords</h4>
-          <div className="demo-account">
-            <span className="demo-role">Admin:</span>
-            <span>admin123</span>
-          </div>
-          <div className="demo-account">
-            <span className="demo-role">Manager:</span>
-            <span>manager123</span>
+          <div style={{ marginTop: '20px', padding: '12px', background: '#f9fafb', borderRadius: '12px', fontSize: '12px' }}>
+            <div><strong>Manager password:</strong> manager123</div>
+            <div><strong>Admin password:</strong> admin123</div>
           </div>
         </div>
       </div>
     </div>
   );
 }
+
+export default Signup;

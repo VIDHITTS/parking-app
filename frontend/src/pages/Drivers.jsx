@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import Header from '../components/Header';
 import { driverService } from '../services/api';
 
 function Drivers() {
@@ -17,7 +16,7 @@ function Drivers() {
             const response = await driverService.getAllDrivers();
             setDrivers(response.data.drivers);
         } catch (error) {
-            console.error('Error fetching drivers:', error);
+            console.error('Error:', error);
         }
     };
 
@@ -30,26 +29,31 @@ function Drivers() {
             setShowForm(false);
             fetchDrivers();
         } catch (error) {
-            console.error('Error adding driver:', error);
-            alert('Failed to add driver');
+            console.error('Error:', error);
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div>
-            <Header title="Drivers" description="Manage driver information" />
-            <div className="container">
-                <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '20px' }}>
-                    <button onClick={() => setShowForm(!showForm)} className="btn-primary">
-                        {showForm ? 'Cancel' : '+ Add Driver'}
-                    </button>
-                </div>
+        <div className="app-wrapper">
+            <div className="hero-header">
+                <h1>Drivers</h1>
+                <div className="subtitle">Manage driver information</div>
+            </div>
+
+            <div className="content-area">
+                <button
+                    onClick={() => setShowForm(!showForm)}
+                    className="btn-primary"
+                    style={{ marginBottom: '20px' }}
+                >
+                    {showForm ? 'Cancel' : '+ Add Driver'}
+                </button>
 
                 {showForm && (
-                    <div className="action-card" style={{ marginBottom: '30px' }}>
-                        <h3>Add New Driver</h3>
+                    <div style={{ background: '#f9fafb', padding: '20px', borderRadius: '16px', marginBottom: '20px' }}>
+                        <h3 style={{ marginBottom: '16px' }}>Add New Driver</h3>
                         <form onSubmit={handleSubmit}>
                             <div className="form-group">
                                 <label>Name</label>
@@ -76,17 +80,18 @@ function Drivers() {
                     </div>
                 )}
 
-                <div className="parking-list">
-                    {drivers.map((driver) => (
-                        <div key={driver.id} className="parking-card">
-                            <h4>{driver.name}</h4>
-                            <p>Phone: {driver.phone}</p>
-                            <p style={{ fontSize: '12px', color: '#9ca3af' }}>
-                                Added: {new Date(driver.created_at).toLocaleDateString()}
-                            </p>
+                {drivers.map((driver) => (
+                    <div key={driver.id} className="parking-card">
+                        <h3>{driver.name}</h3>
+                        <div className="parking-location">
+                            <span>📞</span>
+                            <span>{driver.phone}</span>
                         </div>
-                    ))}
-                </div>
+                        <div style={{ fontSize: '12px', color: '#9ca3af', marginTop: '8px' }}>
+                            Added: {new Date(driver.created_at).toLocaleDateString()}
+                        </div>
+                    </div>
+                ))}
             </div>
         </div>
     );

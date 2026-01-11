@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import Header from '../components/Header';
 import { carService, driverService } from '../services/api';
 
 function Cars() {
@@ -19,7 +18,7 @@ function Cars() {
             const response = await carService.getAllCars();
             setCars(response.data.cars);
         } catch (error) {
-            console.error('Error fetching cars:', error);
+            console.error('Error:', error);
         }
     };
 
@@ -28,7 +27,7 @@ function Cars() {
             const response = await driverService.getAllDrivers();
             setDrivers(response.data.drivers);
         } catch (error) {
-            console.error('Error fetching drivers:', error);
+            console.error('Error:', error);
         }
     };
 
@@ -41,26 +40,31 @@ function Cars() {
             setShowForm(false);
             fetchCars();
         } catch (error) {
-            console.error('Error adding car:', error);
-            alert('Failed to add car');
+            console.error('Error:', error);
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div>
-            <Header title="Cars" description="Manage vehicle information" />
-            <div className="container">
-                <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '20px' }}>
-                    <button onClick={() => setShowForm(!showForm)} className="btn-primary">
-                        {showForm ? 'Cancel' : '+ Add Car'}
-                    </button>
-                </div>
+        <div className="app-wrapper">
+            <div className="hero-header">
+                <h1>Cars</h1>
+                <div className="subtitle">Manage vehicle information</div>
+            </div>
+
+            <div className="content-area">
+                <button
+                    onClick={() => setShowForm(!showForm)}
+                    className="btn-primary"
+                    style={{ marginBottom: '20px' }}
+                >
+                    {showForm ? 'Cancel' : '+ Add Car'}
+                </button>
 
                 {showForm && (
-                    <div className="action-card" style={{ marginBottom: '30px' }}>
-                        <h3>Add New Car</h3>
+                    <div style={{ background: '#f9fafb', padding: '20px', borderRadius: '16px', marginBottom: '20px' }}>
+                        <h3 style={{ marginBottom: '16px' }}>Add New Car</h3>
                         <form onSubmit={handleSubmit}>
                             <div className="form-group">
                                 <label>Select Driver</label>
@@ -83,8 +87,8 @@ function Cars() {
                                     type="text"
                                     value={formData.car_name}
                                     onChange={(e) => setFormData({ ...formData, car_name: e.target.value })}
-                                    required
                                     placeholder="e.g., Honda City"
+                                    required
                                 />
                             </div>
                             <div className="form-group">
@@ -93,8 +97,8 @@ function Cars() {
                                     type="text"
                                     value={formData.car_number}
                                     onChange={(e) => setFormData({ ...formData, car_number: e.target.value })}
-                                    required
                                     placeholder="e.g., MH12AB1234"
+                                    required
                                 />
                             </div>
                             <button type="submit" disabled={loading} className="btn-primary">
@@ -104,16 +108,18 @@ function Cars() {
                     </div>
                 )}
 
-                <div className="parking-list">
-                    {cars.map((car) => (
-                        <div key={car.id} className="parking-card">
-                            <h4>{car.car_name}</h4>
-                            <p>Number: {car.car_number}</p>
-                            <p>Driver: {car.drivers?.name}</p>
-                            <p>Phone: {car.drivers?.phone}</p>
+                {cars.map((car) => (
+                    <div key={car.id} className="parking-card">
+                        <h3>🚗 {car.car_name}</h3>
+                        <div className="parking-location">
+                            <span>🔢</span>
+                            <span>{car.car_number}</span>
                         </div>
-                    ))}
-                </div>
+                        <div style={{ marginTop: '8px', fontSize: '13px', color: '#6b7280' }}>
+                            Driver: {car.drivers?.name} • {car.drivers?.phone}
+                        </div>
+                    </div>
+                ))}
             </div>
         </div>
     );

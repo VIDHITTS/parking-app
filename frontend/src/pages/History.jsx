@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import Header from '../components/Header';
 import { parkingService } from '../services/api';
 
 function History() {
@@ -15,53 +14,79 @@ function History() {
             const response = await parkingService.getAllParkings();
             setParkings(response.data.parkings);
         } catch (error) {
-            console.error('Error fetching parkings:', error);
+            console.error('Error:', error);
         } finally {
             setLoading(false);
         }
     };
 
-    const handleMarkPaid = async (id) => {
-        try {
-            await parkingService.markAsPaid(id);
-            fetchParkings();
-        } catch (error) {
-            console.error('Error marking as paid:', error);
-            alert('Failed to mark as paid');
-        }
-    };
-
     return (
-        <div>
-            <Header title="Parking History" description="View all parking records" />
-            <div className="container">
+        <div className="app-wrapper">
+            <div className="hero-header">
+                <h1>Parking History</h1>
+                <div className="subtitle">All your parking records</div>
+            </div>
+
+            <div className="content-area">
                 {loading ? (
-                    <p>Loading...</p>
+                    <div className="loading-state">
+                        <div className="spinner"></div>
+                        <p>Loading...</p>
+                    </div>
                 ) : parkings.length === 0 ? (
-                    <p>No parking records found</p>
+                    <div className="empty-state">
+                        <p>No parking history yet</p>
+                    </div>
                 ) : (
-                    <div className="parking-list">
+                    <div>
                         {parkings.map((parking) => (
                             <div key={parking.id} className="parking-card">
-                                <h4>{parking.cars?.car_name} - {parking.cars?.car_number}</h4>
-                                <p>Driver: {parking.cars?.drivers?.name}</p>
-                                <p>Phone: {parking.cars?.drivers?.phone}</p>
-                                <p>Location: {parking.location}, {parking.city}</p>
-                                <p>Date: {new Date(parking.parking_date).toLocaleDateString()}</p>
-                                <p>Duration: {parking.duration_minutes} minutes</p>
-                                <p>Fee: ₹{parking.fee}</p>
-                                <span className={`status ${parking.is_paid ? 'paid' : 'pending'}`}>
-                                    {parking.is_paid ? 'Paid' : 'Pending'}
-                                </span>
-                                {!parking.is_paid && (
-                                    <button
-                                        onClick={() => handleMarkPaid(parking.id)}
-                                        className="btn-secondary"
-                                        style={{ marginTop: '10px', width: '100%' }}
-                                    >
-                                        Mark as Paid
-                                    </button>
-                                )}
+                                <div className="parking-header">
+                                    <div>
+                                        <h3>{parking.location}</h3>
+                                        <div className="parking-location">
+                                            <span>📍</span>
+                                            <span>{parking.city}</span>
+                                        </div>
+                                    </div>
+                                    <div className="price">₹{parking.fee}</div>
+                                </div>
+
+                                <div className="parking-details">
+                                    <div>
+                                        <span>🕒</span>
+                                        <span>{new Date(parking.parking_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                                    </div>
+                                    <div>
+                                        <span>🚗</span>
+                                        <span>{parking.cars?.car_number || 'N/A'}</span>
+                                    </div>
+                                    <div>
+                                        <span>{parking.duration_minutes}m</span>
+                                    </div>
+                                </div>
+
+                                <div style={{ marginTop: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <span className={parking.is_paid ? 'badge-completed' : 'badge-pending'}>
+                                        {parking.is_paid ? 'completed' : 'pending'}
+                                    </span>
+                                    {!parking.is_paid && (
+                                        <button
+                                            className="btn-primary"
+                                            style={{ padding: '8px 16px', width: 'auto', fontSize: '13px' }}
+                                            onClick={async () => {
+                                                try {
+                                                    await parkingService.markAsPaid(parking.id);
+                                                    fetchParkings();
+                                                } catch (error) {
+                                                    console.error('Error:', error);
+                                                }
+                                            }}
+                                        >
+                                            Mark Paid
+                                        </button>
+                                    )}
+                                </div>
                             </div>
                         ))}
                     </div>
