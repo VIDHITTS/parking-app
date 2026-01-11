@@ -116,7 +116,8 @@ body {
   position: absolute;
   bottom: 0;
   left: 0;
-  right: 0;
+  width: 100%;
+  /* Force width to match parent container */
   height: 70px;
   /* Fixed height to ensure stability */
   background: var(--white);
@@ -129,6 +130,8 @@ body {
   border-bottom-left-radius: 28px;
   /* Match container minus border width approx */
   border-bottom-right-radius: 28px;
+  box-sizing: border-box;
+  /* Ensure padding doesn't expand width */
 }
 
 /* No desktop specific override needed for .bottom-nav width/position 
