@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
-import ProtectedRoute, { RoleRoute } from './components/ProtectedRoute';
-import Navbar from './components/Navbar';
+import ProtectedRoute from './components/ProtectedRoute';
+import BottomNav from './components/BottomNav';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Home from './pages/Home';
@@ -15,7 +15,6 @@ function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <Navbar />
         <Routes>
           <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/login" element={<Login />} />
@@ -33,39 +32,40 @@ function App() {
           <Route
             path="/drivers"
             element={
-              <RoleRoute allowedRoles={['MANAGER']}>
+              <ProtectedRoute>
                 <Drivers />
-              </RoleRoute>
+              </ProtectedRoute>
             }
           />
 
           <Route
             path="/cars"
             element={
-              <RoleRoute allowedRoles={['MANAGER']}>
+              <ProtectedRoute>
                 <Cars />
-              </RoleRoute>
+              </ProtectedRoute>
             }
           />
 
           <Route
             path="/history"
             element={
-              <RoleRoute allowedRoles={['MANAGER']}>
+              <ProtectedRoute>
                 <History />
-              </RoleRoute>
+              </ProtectedRoute>
             }
           />
 
           <Route
             path="/admin"
             element={
-              <RoleRoute allowedRoles={['ADMIN']}>
+              <ProtectedRoute>
                 <AdminDashboard />
-              </RoleRoute>
+              </ProtectedRoute>
             }
           />
         </Routes>
+        <BottomNav />
       </BrowserRouter>
     </AuthProvider>
   );

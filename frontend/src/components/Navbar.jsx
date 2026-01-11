@@ -1,65 +1,87 @@
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
-function Navbar() {
-    const { isAuthenticated, user, logout } = useAuth();
-    const location = useLocation();
-    const navigate = useNavigate();
+export default function Navbar() {
+  const { isAuthenticated, user, logout } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
 
-    if (location.pathname === '/login' || location.pathname === '/signup') {
-        return null;
+  // Don't show navbar on login/signup pages
+  if (location.pathname === '/login' || location.pathname === '/signup') {
+    return null;
+  }
+
+  // Don't show navbar if not authenticated
+  if (!isAuthenticated) {
+    return null;
+  }
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/login');
+  };
+
+  // Determine which nav items to show based on role
+  const getRoleBasedNav = () => {
+    if (user?.role === 'ADMIN') {
+      return [
+        { label: 'Dashboard', path: '/home' },
+        { label: 'Admin', path: '/admin' },
+      ];
+    } else if (user?.role === 'MANAGER') {
+      return [
+        { label: 'Dashboard', path: '/home' },
+        { label: 'History', path: '/history' },
+      ];
     }
+    return [];
+  };
 
-    if (!isAuthenticated) {
-        return null;
-    }
+  const navItems = getRoleBasedNav();
+  const isActive = (path) => location.pathname === path;
 
-    const handleLogout = async () => {
-        await logout();
-        navigate('/login');
-    };
+  return (
+    <nav className="navbar">
+      <div className="container">
+        <div className="navbar-content">
+          <div className="navbar-brand" onClick={() => navigate('/home')}>
+            Parking Manager
+          </div>
+          
+          <div className="navbar-nav">
+            {navItems.map((item) => (
+              <NavButton
+                key={item.path}
+                label={item.label}
+                isActive={isActive(item.path)}
+                onClick={() => navigate(item.path)}
+              />
+            ))}
 
-    const getRoleBasedNav = () => {
-        if (user?.role === 'ADMIN') {
-            return [
-                { label: 'Dashboard', path: '/home' },
-                { label: 'Admin', path: '/admin' },
-            ];
-        } else if (user?.role === 'MANAGER') {
-            return [
-                { label: 'Dashboard', path: '/home' },
-                { label: 'Drivers', path: '/drivers' },
-                { label: 'Cars', path: '/cars' },
-                { label: 'History', path: '/history' },
-            ];
-        }
-        return [];
-    };
-
-    const navItems = getRoleBasedNav();
-
-    return (
-        <nav className="navbar">
-            <div className="nav-brand">
-                <h2>🅿️ Parking App</h2>
+            <div className="navbar-user">
+              <span className={`role-badge ${user?.role?.toLowerCase()}`}>
+                {user?.role}
+              </span>
+              
+              <button className="btn btn-ghost btn-sm" onClick={handleLogout}>
+                Sign out
+              </button>
             </div>
-            <div className="nav-links">
-                {navItems.map((item) => (
-                    <Link
-                        key={item.path}
-                        to={item.path}
-                        className={location.pathname === item.path ? 'active' : ''}
-                    >
-                        {item.label}
-                    </Link>
-                ))}
-                <span className={`role-badge ${user?.role?.toLowerCase()}`}>
-                    {user?.role}
-                </span>
-                <button onClick={handleLogout} className="btn-secondary">Logout</button>
-            </div>
-        </nav>
-    );
+          </div>
+        </div>
+      </div>
+    </nav>
+  );
 }
 
-export default Navbar;
+function NavButton({ label, isActive, onClick }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`nav-button ${isActive ? 'active' : ''}`}
+    >
+      {label}
+    </button>
+  );
+}
