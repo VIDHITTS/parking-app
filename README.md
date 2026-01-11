@@ -1,189 +1,68 @@
-# 🅿️ Parking Management System
+# Valet Parking Management System
 
-A full-stack parking management web application built with React, Node.js, Express, and Supabase PostgreSQL.
+A comprehensive, full-stack digital solution for managing multi-site valet parking operations. This system implements a robust Role-Based Access Control (RBAC) architecture to handle the complete lifecycle of parking sessions, from customer retrieval to driver management.
 
-## 🚀 Features
+## 🚀 Key Features
 
-- **User Authentication** (JWT-based)
-  - Role-based access (Admin/Manager)
-  - Secure login and signup
+### 1. Advanced Role System
+The application supports 4 distinct roles with specific permissions:
+-   **Super Admin**: "God Mode" access. View global statistics, manage parking sites, and **approve/reject** new driver applications.
+-   **Site Manager**: Operates a specific location. Manages active parking sessions and submits new drivers for approval.
+-   **Valet Driver**: Operations staff. Accepting/rejecting parking and retrieval tasks. *(Requires Approval)*.
+-   **Customer (User)**: Scans QR code to track vehicle status, pay fees, and request retrieval.
 
-- **Driver Management**
-  - Add and view drivers
-  - Track driver information
+### 2. Core Workflows
+-   **Driver Onboarding**: Managers submit driver details -> Super Admin reviews license & approves/rejects -> Driver gains access.
+-   **Parking Session**: User scans QR -> Session Starts -> Valet Assigned -> Car Parked -> User Requests Retrieval -> Valet Retrieves -> Payment & Exit.
+-   **Real-time Dashboard**: Live updates for "Active Cars", "Retrieving", and "Revenue".
 
-- **Car Management**
-  - Add cars linked to drivers
-  - View all registered cars
-
-- **Parking Management**
-  - Create parking entries
-  - View parking history
-  - Mark parkings as paid
-  - Track parking fees and duration
-
-- **Admin Dashboard**
-  - View total collection
-  - Track active parkings
-  - Monitor total cars and parkings
+### 3. Security & Architecture
+-   **Audit Logging**: Critical actions (Approval/Rejection) are logged for security.
+-   **Row Level Security (RLS)**: Strict data isolation ensuring managers only see their site's data.
 
 ## 🛠️ Tech Stack
 
-### Frontend
-- React 19
-- Vite
-- React Router DOM
-- Axios
-- CSS3
+-   **Frontend**: React.js (Vite), Glassmorphism UI (CSS3).
+-   **Backend**: Node.js, Express.js.
+-   **Database**: Supabase (PostgreSQL), Auth, Realtime.
 
-### Backend
-- Node.js
-- Express.js
-- Supabase (PostgreSQL)
-- JWT Authentication
-- bcrypt
+## 📦 Installation & Setup
 
-### Deployment
-- Frontend: Vercel
-- Backend: Render
-- Database: Supabase
+### 1. Prerequisites
+-   Node.js (v16+)
+-   Supabase Account
 
-## 📦 Installation
+### 2. Database Setup
+1.  Create a new Supabase Project.
+2.  Go to **SQL Editor**.
+3.  Run the contents of `database/update_db.sql` to set up the schema, roles, and RLS policies.
 
-### Backend Setup
-
+### 3. Backend Setup
 ```bash
 cd backend
 npm install
-
-# Create .env file
-cp .env.example .env
-
-# Add your environment variables:
+# Create .env file with:
 # PORT=5000
-# SUPABASE_URL=your_supabase_url
-# SUPABASE_KEY=your_supabase_key
-# JWT_SECRET=your_secret_key
-
-# Start development server
+# SUPABASE_URL=your_url
+# SUPABASE_KEY=your_key
 npm run dev
 ```
 
-### Frontend Setup
-
+### 4. Frontend Setup
 ```bash
 cd frontend
 npm install
-
-# Create .env file
-cp .env.example .env
-
-# Add your environment variables:
-# VITE_API_URL=your_backend_url
-# VITE_SUPABASE_URL=your_supabase_url
-# VITE_SUPABASE_KEY=your_supabase_key
-
-# Start development server
+# Create .env file with:
+# VITE_API_URL=http://localhost:5000/api
 npm run dev
 ```
 
-## 📊 Database Schema
+## 🔐 Default Credentials (Test Accounts)
 
-### Users Table
-- `id` (UUID, Primary Key)
-- `name` (Text)
-- `email` (Text, Unique)
-- `password_hash` (Text)
-- `role` (Text: ADMIN/MANAGER)
-- `created_at` (Timestamp)
+| Role | Username (Simulated) | Password |
+| :--- | :--- | :--- |
+| **Super Admin** | `admin` | `admin123` |
+| **Manager** | `manager` | `manager123` |
 
-### Drivers Table
-- `id` (UUID, Primary Key)
-- `name` (Text)
-- `phone` (Text)
-- `created_at` (Timestamp)
-
-### Cars Table
-- `id` (UUID, Primary Key)
-- `driver_id` (UUID, Foreign Key)
-- `car_name` (Text)
-- `car_number` (Text)
-- `created_at` (Timestamp)
-
-### Parkings Table
-- `id` (UUID, Primary Key)
-- `car_id` (UUID, Foreign Key)
-- `location` (Text)
-- `city` (Text)
-- `parking_date` (Date)
-- `duration_minutes` (Integer)
-- `fee` (Numeric)
-- `is_paid` (Boolean)
-- `created_at` (Timestamp)
-
-## 🔐 Authentication
-
-### Role-Based Passwords
-- **Admin**: `admin123`
-- **Manager**: `manager123`
-
-Use these passwords during signup to create accounts with the respective roles.
-
-## 🌐 API Endpoints
-
-### Authentication
-- `POST /api/auth/signup` - Register new user
-- `POST /api/auth/login` - Login
-- `GET /api/auth/me` - Get current user
-- `POST /api/auth/logout` - Logout
-
-### Drivers (Protected)
-- `POST /api/drivers` - Add driver
-- `GET /api/drivers` - Get all drivers
-- `GET /api/drivers/:id` - Get driver by ID
-
-### Cars (Protected)
-- `POST /api/cars` - Add car
-- `GET /api/cars?driver_id=` - Get cars by driver
-- `GET /api/cars/all` - Get all cars
-- `GET /api/cars/:id` - Get car by ID
-
-### Parkings (Protected)
-- `POST /api/parkings` - Create parking entry
-- `GET /api/parkings` - Get all parkings
-- `GET /api/parkings/car/:car_id` - Get parkings by car
-- `GET /api/parkings/:id` - Get parking by ID
-- `PATCH /api/parkings/:id/pay` - Mark as paid
-- `DELETE /api/parkings/:id` - Delete parking
-
-### Admin (Protected)
-- `GET /api/admin/insights` - Get analytics
-
-## 📱 Usage
-
-1. **Sign Up**: Create an account with either Admin or Manager role
-2. **Login**: Access the dashboard
-3. **Add Drivers**: Register drivers in the system
-4. **Add Cars**: Link cars to drivers
-5. **Manage Parkings**: View and manage parking records
-6. **Admin Dashboard**: View insights and analytics (Admin only)
-
-## 🎨 Design Features
-
-- Clean, modern UI design
-- Responsive layout
-- Color-coded status indicators
-- Role-based navigation
-- Real-time updates
-
-## 📝 License
-
-MIT License
-
-## 👨‍💻 Author
-
-Developed as part of assignment submission.
-
-## 📧 Contact
-
-For any queries, contact: akapoor@brandworks.site
+## 👨‍💻 Project Status
+Completed and verified for assignment submission.
