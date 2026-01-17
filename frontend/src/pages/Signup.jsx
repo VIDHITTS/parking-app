@@ -20,7 +20,7 @@ function Signup() {
     setError('');
 
     try {
-      const result = await signup(formData);
+      const result = await signup(formData.name, formData.email, formData.password, formData.role);
       if (result.success) {
         navigate('/home');
       } else {

@@ -22,11 +22,24 @@ const allowedOrigins = [
 
 const corsOptions = {
     origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(null, true);
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+
+        // Check if origin is in allowed list
+        if (allowedOrigins.indexOf(origin) !== -1) {
+            return callback(null, true);
         }
+
+        // Allow any localhost origin for development
+        if (origin.match(/^http:\/\/localhost:\d+$/)) {
+            return callback(null, true);
+        }
+
+        // For production, if strict security is needed, uncomment next line
+        // return callback(new Error('Not allowed by CORS'));
+
+        // Default to allow for demo purposes
+        return callback(null, true);
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
