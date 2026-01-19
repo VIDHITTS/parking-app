@@ -1,0 +1,201 @@
+/* Driver Dashboard Styling */
+
+/* Header Override for Driver */
+.driver-header {
+    background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
+    padding: 24px 20px 32px;
+    color: white;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.driver-welcome {
+    font-size: 14px;
+    margin-bottom: 4px;
+    opacity: 0.9;
+}
+
+.driver-name {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+/* Notification Bell */
+.notification-bell {
+    position: absolute;
+    top: 24px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 8px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.notification-bell svg {
+    display: block;
+}
+
+.notification-badge {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    background: #ef4444;
+    color: white;
+    font-size: 10px;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #3730a3;
+}
+
+/* Main Content Overlay */
+.driver-content {
+    margin-top: -20px;
+    padding: 0 16px;
+}
+
+/* Current Task Card */
+.task-card {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 24px;
+}
+
+.car-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.car-icon-box {
+    width: 56px;
+    height: 56px;
+    background: #e0e7ff;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.car-icon-box svg {
+    color: #4f46e5;
+}
+
+.car-info h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1f2937;
+    margin: 0 0 4px 0;
+}
+
+.car-info p {
+    font-size: 14px;
+    color: #6b7280;
+    margin: 0;
+}
+
+.park-badge {
+    display: block;
+    margin-top: 8px;
+    background: #dcfce7;
+    color: #16a34a;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 6px;
+    width: fit-content;
+}
+
+/* Task Details */
+.task-detail-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+    align-items: flex-start;
+}
+
+.task-icon {
+    margin-top: 2px;
+    color: #9ca3af;
+}
+
+.task-text p {
+    margin: 0;
+}
+
+.task-label {
+    font-size: 12px;
+    color: #6b7280;
+    margin-bottom: 2px;
+}
+
+.task-value {
+    font-size: 15px;
+    font-weight: 500;
+    color: #1f2937;
+}
+
+.task-value-sub {
+    font-size: 13px;
+    color: #4b5563;
+}
+
+/* Action Button */
+.btn-action-main {
+    width: 100%;
+    background: #4f46e5;
+    color: white;
+    padding: 16px;
+    border-radius: 12px;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+    transition: transform 0.2s;
+}
+
+.btn-action-main:active {
+    transform: scale(0.98);
+}
+
+/* Bottom Stats */
+.driver-stats-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+    margin-top: 40px;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-label {
+    display: block;
+    font-size: 13px;
+    color: #6b7280;
+    margin-bottom: 4px;
+}
+
+.stat-value {
+    display: block;
+    font-size: 20px;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.stat-value.green {
+    color: #16a34a;
+}
+
+.stat-value.orange {
+    color: #f59e0b;
+}
