@@ -1,165 +1,376 @@
-/* User Scanner Styles */
-
+/* User Home (Scanner) Styling */
 .scanner-container {
-    min-height: 100%;
     background: #f8f7fc;
+    min-height: 100vh;
+    padding-bottom: 80px;
+    position: relative;
+    overflow-x: hidden;
+    max-width: 100%;
+    /* Default */
 }
 
+/* Home Header */
 .scanner-header {
-    background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
-    padding: 24px 20px;
+    background: linear-gradient(135deg, #4f46e5 0%, #312e81 100%);
+    padding: 24px 20px 0;
+    padding-top: 50px;
     color: white;
+    height: 220px;
+    /* Tall header for background */
+    border-bottom-left-radius: 32px;
+    border-bottom-right-radius: 32px;
+    position: relative;
 }
 
-.scanner-header h1 {
-    font-size: 22px;
-    font-weight: 600;
-    margin: 0;
+.home-title {
+    font-size: 16px;
+    opacity: 0.9;
+    margin-bottom: 4px;
 }
 
-.scanner-header p {
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.8);
-    margin: 4px 0 0 0;
-}
-
-.scanner-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 60px 20px;
-}
-
-.scan-title {
+.home-subtitle {
     font-size: 24px;
-    font-weight: 700;
-    color: #111827;
-    margin-bottom: 40px;
-}
-
-.scan-button {
-    width: 180px;
-    height: 180px;
-    border-radius: 40px;
-    background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
-    border: none;
-    box-shadow: 0 20px 50px rgba(79, 70, 229, 0.4);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    color: white;
-    font-size: 18px;
     font-weight: 600;
 }
 
-.scan-button:hover {
-    transform: scale(1.02);
-    box-shadow: 0 25px 60px rgba(79, 70, 229, 0.5);
-}
-
-.scan-button:active {
-    transform: scale(0.98);
-}
-
-.scan-button.scanning {
-    background: #e5e7eb;
-    box-shadow: none;
-    transform: scale(0.95);
-    cursor: not-allowed;
-}
-
-.scan-button .spinner {
-    width: 40px;
-    height: 40px;
-    border: 4px solid #9ca3af;
-    border-top-color: #4f46e5;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-.scan-hint {
-    margin-top: 24px;
-    color: #6b7280;
-    text-align: center;
-    max-width: 280px;
-    font-size: 14px;
-}
-
-/* Scanner Result */
-.scanner-result {
-    background: white;
-    padding: 32px 24px;
-    border-radius: 24px;
-    width: calc(100% - 40px);
-    max-width: 320px;
-    text-align: center;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-    margin: 60px auto;
-}
-
-.success-icon {
-    width: 64px;
-    height: 64px;
-    background: #dcfce7;
-    border-radius: 50%;
+.promo-banner {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-top: 20px;
     display: flex;
     align-items: center;
-    justify-content: center;
-    margin: 0 auto 16px;
+    justify-content: space-between;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.scanner-result h2 {
-    font-size: 22px;
-    font-weight: 700;
-    color: #111827;
-    margin: 0 0 4px 0;
+.promo-text {
+    flex: 1;
 }
 
-.status-text {
-    color: #16a34a;
+.promo-title {
     font-size: 14px;
-    margin: 0 0 24px 0;
-}
-
-.ticket-details {
-    background: #f9fafb;
-    padding: 16px;
-    border-radius: 16px;
-    margin-bottom: 24px;
-    text-align: left;
-}
-
-.detail-row {
-    margin-bottom: 12px;
-}
-
-.detail-row:last-child {
-    margin-bottom: 0;
-}
-
-.detail-label {
-    display: block;
-    font-size: 11px;
-    color: #9ca3af;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    font-weight: 700;
+    color: #fcd34d;
+    /* Gold */
+    display: flex;
+    align-items: center;
+    gap: 6px;
     margin-bottom: 2px;
 }
 
-.detail-value {
-    display: block;
-    font-size: 16px;
+.promo-desc {
+    font-size: 12px;
+    color: white;
+    font-weight: 500;
+}
+
+.promo-car {
+    width: 60px;
+    height: auto;
+}
+
+/* Action Card - Scan */
+.action-card-container {
+    padding: 0 20px;
+    margin-top: -30px;
+    /* Overlap header */
+    position: relative;
+    z-index: 10;
+}
+
+.scan-card {
+    background: #fffbeb;
+    /* Light yellow bg for contrast */
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+    border: 1px solid #fef3c7;
+    cursor: pointer;
+}
+
+.scan-icon-box {
+    width: 60px;
+    height: 60px;
+    background: #f59e0b;
+    /* Orange/Yellow */
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.scan-text h3 {
+    font-size: 18px;
     font-weight: 600;
-    color: #111827;
+    color: #1f2937;
+    margin: 0 0 4px 0;
+}
+
+.scan-text p {
+    font-size: 13px;
+    color: #4b5563;
+    margin: 0;
+}
+
+/* Recent Parking Section */
+.recent-section {
+    padding: 30px 20px;
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 16px;
+}
+
+/* Overlay Styling */
+.scan-overlay {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* Center it */
+    width: 100%;
+    height: 100%;
+
+    /* Simulate Phone on Desktop */
+    max-width: 480px;
+    max-height: 95vh;
+    border-radius: 0;
+    /* Full screen on mobile */
+
+    background: #000;
+    z-index: 1000;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Desktop override for border radius and shadow */
+@media (min-width: 500px) {
+    .scan-overlay {
+        border-radius: 32px;
+        box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.85);
+        /* Dim background */
+    }
+}
+
+.video-feed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+}
+
+.overlay-header {
+    padding: 20px;
+    padding-top: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}
+
+.btn-close {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    border: none;
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.scan-frame-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding-bottom: 100px;
+    z-index: 2;
+    /* Approx above video */
+}
+
+.scan-frame {
+    width: 280px;
+    height: 280px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    /* Subtle border */
+    position: relative;
+    border-radius: 24px;
+    box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.6);
+    /* Dim background outside frame */
+}
+
+.scan-corner {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border-color: #6366f1;
+    /* Purple */
+    border-style: solid;
+    border-width: 4px;
+    z-index: 3;
+}
+
+.top-left {
+    top: -2px;
+    left: -2px;
+    border-right: none;
+    border-bottom: none;
+    border-top-left-radius: 24px;
+}
+
+.top-right {
+    top: -2px;
+    right: -2px;
+    border-left: none;
+    border-bottom: none;
+    border-top-right-radius: 24px;
+}
+
+.bottom-left {
+    bottom: -2px;
+    left: -2px;
+    border-right: none;
+    border-top: none;
+    border-bottom-left-radius: 24px;
+}
+
+.bottom-right {
+    bottom: -2px;
+    right: -2px;
+    border-left: none;
+    border-top: none;
+    border-bottom-right-radius: 24px;
+}
+
+.scan-status {
+    margin-top: 30px;
+    text-align: center;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.scan-status h3 {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.scan-status p {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Vehicle Select Sheet */
+.vehicle-sheet {
+    background: white;
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+    padding: 24px 20px 40px;
+    animation: slideUp 0.3s ease-out;
+    color: #1f2937;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+    }
+
+    to {
+        transform: translateY(0);
+    }
+}
+
+.sheet-handle {
+    width: 40px;
+    height: 4px;
+    background: #e5e7eb;
+    border-radius: 2px;
+    margin: 0 auto 20px;
+}
+
+.sheet-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 8px;
+}
+
+.sheet-subtitle {
+    font-size: 13px;
+    color: #6b7280;
+    margin-bottom: 20px;
+}
+
+.vehicle-select-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.vehicle-option {
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    cursor: pointer;
+}
+
+.vehicle-icon {
+    width: 40px;
+    height: 40px;
+    background: #f3f4f6;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #4b5563;
+}
+
+.vehicle-info h4 {
+    margin: 0 0 4px 0;
+    font-size: 15px;
+    color: #1f2937;
+    font-weight: 500;
+}
+
+.vehicle-info p {
+    margin: 0;
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.btn-register-new {
+    width: 100%;
+    background: #4f46e5;
+    color: white;
+    padding: 16px;
+    font-weight: 600;
+    border-radius: 12px;
+    border: none;
+    margin-top: 20px;
+    font-size: 15px;
+    cursor: pointer;
 }

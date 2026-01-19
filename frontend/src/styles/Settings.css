@@ -1,65 +1,70 @@
-/* Settings Page Styles */
+/* Settings Page Styling */
 
 .settings-container {
-    min-height: 100%;
     background: #f8f7fc;
+    min-height: 100vh;
+    padding-bottom: 80px;
 }
 
 .settings-header {
-    background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
-    padding: 24px 20px;
+    background: #4f46e5;
+    padding: 24px 20px 24px;
+    padding-top: 50px;
     color: white;
+    border-bottom-left-radius: 24px;
+    border-bottom-right-radius: 24px;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+}
+
+.settings-header .back-btn {
+    background: none;
+    border: none;
+    color: white;
+    margin-bottom: 12px;
+    padding: 0;
+    cursor: pointer;
 }
 
 .settings-header h1 {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 600;
-    margin: 0;
+    margin: 0 0 4px 0;
 }
 
 .settings-subtitle {
-    font-size: 14px;
+    font-size: 13px;
     color: rgba(255, 255, 255, 0.8);
-    margin: 4px 0 0 0;
+    margin: 0;
 }
 
 .settings-content {
     padding: 20px;
 }
 
-.settings-section {
-    margin-bottom: 24px;
-}
-
-.section-title {
-    font-size: 13px;
-    font-weight: 600;
-    color: #6b7280;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin: 0 0 12px 4px;
-}
-
+/* Profile Card */
 .profile-card {
+    background: #f3e8ff;
+    /* Light purple tint as per screenshot */
+    border-radius: 16px;
+    padding: 20px;
     display: flex;
     align-items: center;
     gap: 16px;
-    background: white;
-    padding: 20px;
-    border-radius: 16px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e9d5ff;
+    margin-bottom: 24px;
+    position: relative;
 }
 
 .profile-avatar {
     width: 56px;
     height: 56px;
+    background: #6366f1;
     border-radius: 50%;
-    background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
-    color: white;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
+    color: white;
+    font-size: 22px;
     font-weight: 600;
 }
 
@@ -70,68 +75,65 @@
 .profile-name {
     font-size: 18px;
     font-weight: 600;
-    color: #111827;
+    color: #1f2937;
+    margin: 0 0 2px 0;
+}
+
+.profile-phone {
+    font-size: 14px;
+    color: #6b7280;
     margin: 0;
 }
 
-.profile-email {
-    font-size: 14px;
-    color: #6b7280;
-    margin: 4px 0 8px 0;
+.edit-btn {
+    color: #6366f1;
 }
 
-.profile-role {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 600;
-    color: #4f46e5;
-    background: rgba(79, 70, 229, 0.1);
-    padding: 4px 10px;
-    border-radius: 6px;
-    text-transform: uppercase;
-}
-
+/* Settings List */
 .settings-list {
-    background: white;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .settings-item {
+    background: white;
+    padding: 16px;
+    border-radius: 16px;
     display: flex;
     align-items: center;
-    gap: 14px;
-    padding: 16px 20px;
-    border-bottom: 1px solid #f3f4f6;
+    gap: 16px;
     text-decoration: none;
-    color: #374151;
-    transition: background 0.2s ease;
+    color: #1f2937;
+    border: 1px solid #f3f4f6;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    transition: all 0.2s;
+    font-weight: 500;
 }
 
-.settings-item:last-child {
-    border-bottom: none;
+.settings-item:active {
+    transform: scale(0.98);
 }
 
-.settings-item:hover {
-    background: #f9fafb;
+.settings-icon-box {
+    width: 40px;
+    height: 40px;
+    background: #f3f4f6;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #4b5563;
 }
 
-.settings-item svg {
-    color: #6b7280;
-    flex-shrink: 0;
-}
-
-.settings-item span {
+.item-label {
     flex: 1;
     font-size: 15px;
 }
 
-.settings-item .chevron {
+.chevron {
     color: #9ca3af;
 }
 
-.settings-value {
-    color: #9ca3af;
-    font-size: 14px;
-}
+/* Bottom Login Switcher */
+/* This is likely global but matches screenshot */

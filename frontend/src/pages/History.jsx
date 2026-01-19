@@ -95,26 +95,24 @@ function History() {
                         {parkings.map((parking) => (
                             <div key={parking.id} className="history-card">
                                 <div className="card-main">
-                                    <div className="card-left">
+                                    <div className="card-top-row">
                                         <h3 className="mall-name">{parking.location}</h3>
-                                        <div className="mall-address">
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                                                <circle cx="12" cy="10" r="3" />
-                                            </svg>
-                                            <span>{parking.address || parking.city}</span>
-                                        </div>
-                                    </div>
-                                    <div className="card-right">
                                         <span className="price">₹{parking.fee}</span>
-                                        <span className={`status-badge ${parking.status || 'completed'}`}>
+                                    </div>
+                                    <div className="mall-address">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                            <circle cx="12" cy="10" r="3" />
+                                        </svg>
+                                        <span>{parking.address || parking.city}</span>
+                                        <span className={`status-badge ${parking.status || 'completed'}`} style={{ marginLeft: 'auto' }}>
                                             {parking.status || 'completed'}
                                         </span>
                                     </div>
                                 </div>
 
-                                <div className="card-footer">
-                                    <div className="detail-item">
+                                <div className="card-details-row">
+                                    <div className="detail-group">
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                             <circle cx="12" cy="12" r="10" />
                                             <polyline points="12 6 12 12 16 14" />
@@ -127,7 +125,7 @@ function History() {
                                             })}
                                         </span>
                                     </div>
-                                    <div className="detail-item">
+                                    <div className="detail-group">
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                             <rect x="3" y="8" width="18" height="10" rx="2" />
                                             <circle cx="7" cy="15" r="1.5" />

@@ -17,7 +17,9 @@ INSERT INTO sites (name, location, image_url, is_active) VALUES
 ('Inorbit Mall - Malad', 'Malad West, Mumbai', 'https://images.unsplash.com/photo-1555636222-cae831e670b3?auto=format&fit=crop&q=80', true),
 ('High Street Phoenix', 'Lower Parel, Mumbai', 'https://images.unsplash.com/photo-1567449303078-57ad995bd329?auto=format&fit=crop&q=80', true),
 ('R City Mall - Ghatkopar', 'Ghatkopar West, Mumbai', 'https://images.unsplash.com/photo-1581417478175-a9ef18f210c2?auto=format&fit=crop&q=80', true),
-('Oberoi Mall - Goregaon', 'Goregaon East, Mumbai', 'https://images.unsplash.com/photo-1519214605650-76a613ee3245?auto=format&fit=crop&q=80', true)
+('Oberoi Mall - Goregaon', 'Goregaon East, Mumbai', 'https://images.unsplash.com/photo-1519214605650-76a613ee3245?auto=format&fit=crop&q=80', true),
+('Central Plaza', 'Andheri West, Mumbai', 'https://images.unsplash.com/photo-1567449303078-57ad995bd329?auto=format&fit=crop&q=80', true),
+('City Center Mall', 'Bandra East, Mumbai', 'https://images.unsplash.com/photo-1581417478175-a9ef18f210c2?auto=format&fit=crop&q=80', true)
 ON CONFLICT DO NOTHING;
 
 -- 2. Users (Demo Credentials)
@@ -71,71 +73,42 @@ VALUES
 ('Vijay Thakur', '9553456789', 'MH-03-2024-009012', 'pending', (SELECT id FROM users WHERE email = 'manager2@test.com'))
 ON CONFLICT DO NOTHING;
 
--- 5. Sample Parking Records (For realistic stats display)
+-- 5. Add Specific History Records for User "Priya Patel" (user@test.com) to match screenshots
 DO $$
 DECLARE
-    v_site_id UUID;
-    v_driver_id UUID;
+    v_user_id UUID;
+    v_phoenix_id UUID;
+    v_central_id UUID;
+    v_city_id UUID;
 BEGIN
-    SELECT id INTO v_site_id FROM sites WHERE name = 'Phoenix Mall - Lower Parel' LIMIT 1;
-    SELECT id INTO v_driver_id FROM drivers WHERE name = 'Amit Sharma' LIMIT 1;
+    SELECT id INTO v_user_id FROM users WHERE email = 'user@test.com' LIMIT 1;
+    -- Note: Since we don't have vehicle/customer table hard linked in basic schema, we use text fields in sessions
     
-    -- Insert some active parking records
-    IF v_site_id IS NOT NULL AND v_driver_id IS NOT NULL THEN
-        -- These would be active parking entries
-        INSERT INTO parking_records (
-            vehicle_number, 
-            vehicle_type,
-            site_id, 
-            checked_in_by, 
-            status,
-            created_at
-        )
-        SELECT 
-            'MH-01-' || LPAD(generate_series::text, 4, '0'),
-            CASE WHEN random() > 0.3 THEN 'car' ELSE 'bike' END,
-            v_site_id,
-            v_driver_id,
-            'active',
-            NOW() - (random() * interval '8 hours')
-        FROM generate_series(1, 45)
-        ON CONFLICT DO NOTHING;
-    END IF;
-END $$;
+    -- 1. Phoenix Mall (8 Dec 2025) - Completed
+    INSERT INTO parking_sessions (
+        vehicle_number, vehicle_model, customer_name, location, status, 
+        entry_time, exit_time, fee, is_paid, created_at
+    ) VALUES (
+        'MH 12 AB 1234', 'Toyota Camry', 'Priya Patel', 'Phoenix Mall - Lower Parel', 'Completed',
+        '2025-12-08 14:00:00', '2025-12-08 18:15:00', 180, true, '2025-12-08 14:00:00'
+    );
 
--- 6. Add some completed records for statistics
-DO $$
-DECLARE
-    v_site_id UUID;
-    v_driver_id UUID;
-BEGIN
-    SELECT id INTO v_site_id FROM sites WHERE name = 'Phoenix Mall - Lower Parel' LIMIT 1;
-    SELECT id INTO v_driver_id FROM drivers WHERE name = 'Suresh Rajan' LIMIT 1;
-    
-    IF v_site_id IS NOT NULL AND v_driver_id IS NOT NULL THEN
-        -- Historical completed parking records
-        INSERT INTO parking_records (
-            vehicle_number, 
-            vehicle_type,
-            site_id, 
-            checked_in_by,
-            checked_out_by,
-            status,
-            amount,
-            created_at,
-            updated_at
-        )
-        SELECT 
-            'MH-02-' || LPAD(generate_series::text, 4, '0'),
-            CASE WHEN random() > 0.4 THEN 'car' ELSE 'bike' END,
-            v_site_id,
-            v_driver_id,
-            v_driver_id,
-            'completed',
-            CASE WHEN random() > 0.4 THEN 100 ELSE 50 END,
-            NOW() - (random() * interval '30 days'),
-            NOW() - (random() * interval '30 days') + interval '3 hours'
-        FROM generate_series(1, 1200)
-        ON CONFLICT DO NOTHING;
-    END IF;
+    -- 2. Central Plaza (5 Dec 2025) - Completed
+    INSERT INTO parking_sessions (
+        vehicle_number, vehicle_model, customer_name, location, status,
+        entry_time, exit_time, fee, is_paid, created_at
+    ) VALUES (
+        'MH 14 CD 5678', 'Honda Civic', 'Priya Patel', 'Central Plaza', 'Completed',
+        '2025-12-05 10:00:00', '2025-12-05 12:50:00', 120, true, '2025-12-05 10:00:00'
+    );
+
+    -- 3. City Center Mall (3 Dec 2025) - Completed
+    INSERT INTO parking_sessions (
+        vehicle_number, vehicle_model, customer_name, location, status,
+        entry_time, exit_time, fee, is_paid, created_at
+    ) VALUES (
+        'MH 12 AB 1234', 'Toyota Camry', 'Priya Patel', 'City Center Mall', 'Completed',
+        '2025-12-03 16:30:00', '2025-12-03 21:00:00', 200, true, '2025-12-03 16:30:00'
+    );
+
 END $$;
