@@ -58,19 +58,6 @@ function BottomNav() {
         const role = user?.role;
 
         switch (role) {
-            case 'MANAGER':
-                return [
-                    { path: '/manager', label: 'Dashboard', icon: Icons.Home },
-                    { path: '/drivers', label: 'Drivers', icon: Icons.Drivers },
-                    { path: '/history', label: 'History', icon: Icons.History },
-                    { path: '/settings', label: 'Settings', icon: Icons.Settings },
-                ];
-            case 'DRIVER':
-                return [
-                    { path: '/home', label: 'Console', icon: Icons.Home },
-                    { path: '/history', label: 'History', icon: Icons.History },
-                    { path: '/settings', label: 'Settings', icon: Icons.Settings },
-                ];
             case 'SUPER_ADMIN':
                 return [
                     { path: '/super-admin', label: 'Dashboard', icon: Icons.Home },
@@ -79,17 +66,23 @@ function BottomNav() {
                     { path: '/settings', label: 'Settings', icon: Icons.Settings },
                 ];
             case 'USER':
-            default:
                 return [
                     { path: '/home', label: 'Home', icon: Icons.Home },
                     { path: '/cars', label: 'Ticket', icon: Icons.Ticket },
                     { path: '/history', label: 'History', icon: Icons.History },
                     { path: '/settings', label: 'Settings', icon: Icons.Settings },
                 ];
+            case 'MANAGER':
+            case 'DRIVER':
+            default:
+                return []; // No bottom nav for these roles
         }
     };
 
     const navItems = getNavItems();
+
+    // If no items (Manager/Driver), don't render anything
+    if (navItems.length === 0) return null;
 
     return (
         <nav className="bottom-nav">
