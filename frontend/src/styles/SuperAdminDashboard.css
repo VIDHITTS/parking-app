@@ -1,45 +1,50 @@
-/* Super Admin Dashboard Styles */
+/* Super Admin Dashboard Styling */
 
 .super-admin-container {
-    min-height: 100%;
+    background: #fdf4ff;
+    /* Light Pinkish/Purple Tint bg? Screenshot looks very light purple/offwhite */
     background: #f8f7fc;
+    /* Sticking to consistent app bg for now unless screenshot implies pink */
+    min-height: 100vh;
 }
 
-/* Header */
 .super-admin-header {
-    background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 50%, #5b21b6 100%);
-    padding: 20px 20px 24px;
-    border-radius: 0 0 32px 32px;
+    background: #7c3aed;
+    /* Purple */
+    padding: 24px 20px 24px;
     color: white;
+    padding-top: 50px;
+    /* Safe area */
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
 }
 
 .header-top {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 12px;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
 }
 
 .back-btn {
     background: none;
     border: none;
     color: white;
-    padding: 8px;
-    margin: -8px;
+    padding: 0;
     cursor: pointer;
+    display: flex;
 }
 
 .header-title h1 {
-    font-size: 22px;
+    font-size: 18px;
     font-weight: 600;
     margin: 0;
-    color: white;
 }
 
 .header-subtitle {
-    font-size: 14px;
+    font-size: 13px;
     color: rgba(255, 255, 255, 0.8);
-    margin: 4px 0 0 0;
+    margin: 2px 0 0;
 }
 
 /* Tabs */
@@ -49,38 +54,51 @@
 }
 
 .tab-btn {
-    padding: 10px 28px;
-    border-radius: 24px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    background: transparent;
-    color: white;
-    font-size: 15px;
+    flex: 1;
+    padding: 10px;
+    border-radius: 12px;
+    border: none;
+    font-size: 14px;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    background: white;
+    color: #6b7280;
+    transition: all 0.2s;
 }
 
 .tab-btn.active {
-    background: white;
-    color: #7c3aed;
-    border-color: white;
-}
-
-.tab-btn .badge {
-    background: #ef4444;
+    background: #9333ea;
+    /* Slightly lighter/different purple for active tab? Screenshot active is solid purple */
+    background: #a855f7;
+    background: #d8b4fe;
+    /* Too light? Screenshot looks same as header or brighter */
+    background: #9F7AEA;
+    /* Try this */
+    background: #ffffff;
+    /* Wait, in screenshot Overview is PURPLE FILLED, Approvals is WHITE */
+    background: #a855f7;
+    background: #9333ea;
     color: white;
-    font-size: 11px;
-    padding: 2px 6px;
-    border-radius: 10px;
-    font-weight: 600;
 }
 
-/* Content */
+/* In screenshot: Header is #6B21A8 (Deep Purple), Active Tab is #9333EA (Brighter Purple) */
+.super-admin-header {
+    background: #6b21a8;
+}
+
+.tab-btn.active {
+    background: #9333ea;
+    color: white;
+}
+
+.tab-btn {
+    background: white;
+    color: #374151;
+}
+
+
 .super-admin-content {
-    padding: 24px 20px;
+    padding: 20px;
 }
 
 /* Site Selector */
@@ -90,41 +108,37 @@
 
 .section-label {
     display: block;
-    font-size: 14px;
-    color: #374151;
+    font-size: 13px;
+    color: #4b5563;
     margin-bottom: 8px;
     font-weight: 500;
 }
 
 .select-wrapper {
     position: relative;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
 }
 
 .site-select {
     width: 100%;
-    padding: 14px 40px 14px 16px;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    background: white;
-    font-size: 16px;
-    color: #111827;
+    padding: 12px 16px;
+    border: none;
+    background: transparent;
+    font-size: 14px;
+    color: #1f2937;
     appearance: none;
-    cursor: pointer;
-}
-
-.site-select:focus {
     outline: none;
-    border-color: #7c3aed;
-    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
 }
 
 .select-arrow {
     position: absolute;
-    right: 14px;
+    right: 16px;
     top: 50%;
     transform: translateY(-50%);
-    pointer-events: none;
     color: #6b7280;
+    pointer-events: none;
 }
 
 /* Performance Section */
@@ -136,14 +150,10 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: 16px;
-    color: #111827;
-    font-size: 16px;
-    font-weight: 600;
-}
-
-.section-header svg {
-    color: #6b7280;
+    margin-bottom: 12px;
+    color: #374151;
+    font-weight: 500;
+    font-size: 15px;
 }
 
 .performance-cards {
@@ -156,126 +166,150 @@
     background: white;
     padding: 16px;
     border-radius: 16px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    border: 1px solid #f3e8ff;
+    /* Light purple border */
+}
+
+/* Specific styling from screenshot */
+.performance-card:first-child {
+    border-color: #d8b4fe;
+    /* Lighter purple border */
+}
+
+.performance-card:last-child {
+    border-color: #d8b4fe;
 }
 
 .perf-label {
     display: block;
-    font-size: 14px;
+    font-size: 12px;
     color: #6b7280;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 
 .perf-value {
-    font-size: 28px;
-    font-weight: 700;
+    display: block;
+    font-size: 24px;
+    font-weight: 600;
+    color: #1f2937;
 }
 
 .perf-value.purple {
-    color: #7c3aed;
+    color: #9333ea;
 }
 
 .perf-value.green {
-    color: #16a34a;
+    color: #9333ea;
+    /* Screenshot shows COLLECTION is also PURPLE */
 }
 
 /* Stats Section */
 .stats-section {
-    margin-bottom: 24px;
-}
-
-.stat-row {
-    display: flex;
-    align-items: center;
-    padding: 16px;
     background: white;
     border-radius: 16px;
+    padding: 8px 16px;
+    /* It looks like a list in a card? No, screenshot shows separate cards for "Total Tickets", "Total Collection", "Active Parking" */
+    background: transparent;
+    padding: 0;
+}
+
+/* "Overall Statistics" layout from screenshot */
+/* Screenshot shows: Header "Overall Statistics" */
+/* Then cards: "Total Tickets", "Total Collection", "Active Parking" stacked vertically */
+
+.stat-row {
+    /* Actually they are CARDs in the screenshot */
+    background: white;
+    border-radius: 16px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     margin-bottom: 12px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e5e7eb;
 }
 
 .stat-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 14px;
+    margin-right: 12px;
+    display: none;
+    /* Screenshot doesn't show icons? Wait, image is blurry. 
+    Image 1 shows: Icon (Ticket), Text "Total Tickets", Value "1247" at right?
+    Yes, "ticket icon", "Total Tickets", "1247". 
+    */
+    display: flex;
 }
 
 .stat-icon.purple-bg {
-    background: rgba(124, 58, 237, 0.1);
-}
-
-.stat-icon.blue-bg {
-    background: rgba(37, 99, 235, 0.1);
+    background: #f3e8ff;
+    color: #9333ea;
 }
 
 .stat-icon.green-bg {
-    background: rgba(22, 163, 74, 0.1);
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.stat-icon.blue-bg {
+    background: #dbeafe;
+    color: #2563eb;
 }
 
 .stat-label {
     flex: 1;
-    font-size: 15px;
-    color: #374151;
-    font-weight: 500;
+    font-size: 14px;
+    color: #4b5563;
 }
 
 .stat-value {
-    font-size: 22px;
-    font-weight: 700;
-    color: #111827;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1f2937;
 }
 
-/* Site Info Card */
+/* Active Parking Card */
+/* Screenshot shows it just like the others */
+
+/* Site Info Card (Bottom Pink One) */
 .site-info-card {
-    background: linear-gradient(135deg, #fdf4ff 0%, #fce7f3 100%);
-    padding: 20px;
-    border-radius: 20px;
-    margin-top: 8px;
+    background: #f3e8ff;
+    /* Purple tint */
+    border-radius: 16px;
+    padding: 16px;
+    border: 1px solid #d8b4fe;
+    margin-top: 20px;
 }
 
 .site-name {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
-    color: #111827;
+    color: #1f2937;
     margin: 0 0 4px 0;
 }
 
 .site-location {
-    font-size: 14px;
+    font-size: 13px;
     color: #6b7280;
     margin: 0;
 }
 
-/* Approvals List */
+/* Approvals Tab */
 .approvals-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.empty-state {
-    text-align: center;
-    padding: 60px 20px;
-    color: #6b7280;
-}
-
-.empty-state svg {
-    margin-bottom: 16px;
-}
-
-.empty-state p {
-    font-size: 16px;
+    margin-top: 20px;
 }
 
 .approval-card {
     background: white;
-    padding: 20px;
-    border-radius: 20px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .approval-header {
@@ -286,61 +320,65 @@
 }
 
 .driver-name {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
-    color: #111827;
-    margin: 0;
+    margin: 0 0 2px 0;
 }
 
 .driver-license {
-    font-size: 14px;
+    font-size: 13px;
     color: #6b7280;
-    margin: 4px 0 0 0;
+    margin: 0;
 }
 
 .pending-badge {
     background: #fef3c7;
     color: #d97706;
     font-size: 11px;
-    font-weight: 700;
-    padding: 4px 10px;
+    padding: 4px 8px;
     border-radius: 6px;
+    font-weight: 600;
 }
 
 .approval-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
     gap: 12px;
 }
 
-.approve-btn {
-    padding: 12px;
-    background: #dcfce7;
-    color: #15803d;
+.approve-btn,
+.reject-btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
     border: none;
-    border-radius: 12px;
-    font-size: 15px;
-    font-weight: 600;
+    font-size: 14px;
+    font-weight: 500;
     cursor: pointer;
-    transition: all 0.2s ease;
 }
 
-.approve-btn:hover {
-    background: #bbf7d0;
+.approve-btn {
+    background: #7c3aed;
+    color: white;
 }
 
 .reject-btn {
-    padding: 12px;
-    background: #fee2e2;
-    color: #b91c1c;
-    border: none;
-    border-radius: 12px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
+    background: #f3f4f6;
+    color: #374151;
 }
 
-.reject-btn:hover {
-    background: #fecaca;
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #6b7280;
+}
+
+.empty-state svg {
+    margin-bottom: 12px;
+    color: #d8b4fe;
+    /* Purple tinted icon */
+    background: #f3e8ff;
+    padding: 12px;
+    border-radius: 50%;
+    width: 64px;
+    height: 64px;
 }

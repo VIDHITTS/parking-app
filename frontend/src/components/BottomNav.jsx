@@ -58,13 +58,6 @@ function BottomNav() {
         const role = user?.role;
 
         switch (role) {
-            case 'SUPER_ADMIN':
-                return [
-                    { path: '/super-admin', label: 'Dashboard', icon: Icons.Home },
-                    { path: '/admin/sites', label: 'Sites', icon: Icons.Sites },
-                    { path: '/history', label: 'History', icon: Icons.History },
-                    { path: '/settings', label: 'Settings', icon: Icons.Settings },
-                ];
             case 'USER':
                 return [
                     { path: '/home', label: 'Home', icon: Icons.Home },
@@ -72,6 +65,7 @@ function BottomNav() {
                     { path: '/history', label: 'History', icon: Icons.History },
                     { path: '/settings', label: 'Settings', icon: Icons.Settings },
                 ];
+            case 'SUPER_ADMIN': // Also hide bottom nav for Super Admin
             case 'MANAGER':
             case 'DRIVER':
             default:
