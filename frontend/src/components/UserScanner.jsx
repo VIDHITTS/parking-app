@@ -1,7 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { parkingService } from '../services/api';
-// import carImage from '../assets/react.svg'; 
 import '../styles/UserScanner.css';
 
 function UserScanner() {

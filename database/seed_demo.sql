@@ -1,9 +1,8 @@
--- 0. FIX CONSTRAINTS (Crucial Step to prevent errors)
--- Fix 1: Update Role Check to include DRIVER and SUPER_ADMIN
+-- Role Constraints
 ALTER TABLE users DROP CONSTRAINT IF EXISTS users_role_check;
 ALTER TABLE users ADD CONSTRAINT users_role_check CHECK (role IN ('SUPER_ADMIN', 'ADMIN', 'MANAGER', 'DRIVER', 'USER'));
 
--- Fix 2: Update pending_drivers FK to point to public.users (since we use custom auth)
+-- Pending Drivers FK
 ALTER TABLE pending_drivers DROP CONSTRAINT IF EXISTS pending_drivers_submitted_by_fkey;
 ALTER TABLE pending_drivers ADD CONSTRAINT pending_drivers_submitted_by_fkey 
     FOREIGN KEY (submitted_by) REFERENCES public.users(id) ON DELETE SET NULL;

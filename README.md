@@ -14,7 +14,8 @@ A full-stack web application designed to streamline multi-site parking operation
 -   **Role-Based Access Control (RBAC)**: Secure routing and data isolation for 4 distinct roles.
 -   **Driver Approval Workflow**: Strict vetting process where Managers nominate and Super Admins approve drivers.
 -   **Real-Time Dashboard**: Live tracking of parking sessions (Active, Retrieving, Completed).
--   **QR Code Integration**: Seamless user experience for check-in and check-out.
+-   **QR Code Integration**: Seamless user experience for check-in and check-out with **Live Camera Overlay**.
+-   **Premium UI/UX**: Modern, responsive design with glassmorphism, dark/light modes (User Scanner), and smooth animations.
 -   **Secure Auditing**: Logs critical actions like driver approvals.
 
 ## 🛠️ Tech Stack
