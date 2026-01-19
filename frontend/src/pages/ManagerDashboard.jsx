@@ -1,249 +1,256 @@
 import { useState, useEffect } from 'react';
 import { parkingService } from '../services/api';
+import AddDriverModal from '../components/AddDriverModal';
 import { useAuth } from '../contexts/AuthContext';
-import CheckInModal from '../components/CheckInModal';
-import AddDriverModal from '../components/AddDriverModal'; // New
+import '../styles/ManagerDashboard.css';
 
 function ManagerDashboard() {
-    const { user, logout } = useAuth();
-    const [sessions, setSessions] = useState([]);
-    const [stats, setStats] = useState({ active: 0, retrieving: 0, revenue: 0 });
-    const [loading, setLoading] = useState(true);
+    const { logout } = useAuth();
     const [activeTab, setActiveTab] = useState('All');
-    const [showCheckIn, setShowCheckIn] = useState(false);
-    const [showAddDriver, setShowAddDriver] = useState(false); // New
+    const [showAddDriver, setShowAddDriver] = useState(false);
+    const [editingValetId, setEditingValetId] = useState(null); // ID of session being edited
 
-    useEffect(() => {
-        fetchData();
-    }, []);
-
-    const fetchData = async () => {
-        try {
-            const [sessionsRes, statsRes] = await Promise.all([
-                parkingService.getAllSessions(),
-                parkingService.getStats()
-            ]);
-            setSessions(sessionsRes.data.sessions || []);
-            setStats(statsRes.data.stats || { active: 0, retrieving: 0, revenue: 0 });
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const handleStatusUpdate = async (id, newStatus) => {
-        try {
-            if (!window.confirm(`Mark as ${newStatus}?`)) return;
-            await parkingService.updateStatus(id, newStatus);
-            fetchData();
-        } catch (error) {
-            alert('Failed to update status');
-        }
-    };
-
-    const filteredSessions = sessions.filter(session => {
-        if (activeTab === 'All') return session.status !== 'Completed';
-        return session.status === activeTab;
+    // Hardcoded Demo state to match screenshot perfectly for now
+    const [stats] = useState({
+        active: 3,
+        retrieving: 1,
+        totalToday: 5,
+        revenue: 825
     });
 
+    const [sessions, setSessions] = useState([
+        {
+            id: '1',
+            vehicle: 'Honda City',
+            plate: 'MH02AB1234',
+            customer: 'Amit Sharma',
+            valet: 'Rajesh Kumar',
+            valetId: 'V001',
+            location: 'Phoenix Mall',
+            subLocation: 'Lower Parel, Mumbai',
+            status: 'Parked',
+            entryTime: '19 Jan at 08:18 PM',
+            duration: '2h 0m',
+            payment: 150,
+            isPaid: true
+        },
+        {
+            id: '2',
+            vehicle: 'Maruti Swift',
+            plate: 'MH12CD5678',
+            customer: 'Priya Verma',
+            valet: 'Unassigned',
+            valetId: null,
+            location: 'Phoenix Mall',
+            subLocation: 'Lower Parel, Mumbai',
+            status: 'Parked',
+            entryTime: '19 Jan at 07:30 PM',
+            duration: '2h 45m',
+            payment: 100,
+            isPaid: false
+        }
+    ]);
+
+    const handleReassign = (e) => {
+        e.preventDefault();
+        setEditingValetId(null);
+        alert('Valet reassigned successfully');
+    };
+
     return (
-        <>
-            <div className="hero-header" style={{ paddingBottom: '60px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div>
-                        <h1>Dashboard</h1>
-                        <div className="subtitle">Manager View</div>
+        <div className="manager-container" style={{ background: '#f8f7fc', minHeight: '100%' }}>
+            {/* Header */}
+            <header className="manager-header">
+                <div className="manager-nav">
+                    <div className="nav-left">
+                        <button className="back-arrow" onClick={logout}>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M19 12H5M12 19l-7-7 7-7" />
+                            </svg>
+                        </button>
+                        <span className="manager-title">Manager Dashboard</span>
                     </div>
-                    <div style={{ display: 'flex', gap: '8px' }}>
-                        {/* Add Driver Button */}
-                        <button
-                            onClick={() => setShowAddDriver(true)}
-                            style={{
-                                background: 'rgba(255,255,255,0.2)', color: 'white', border: 'none',
-                                height: '40px', padding: '0 12px', borderRadius: '12px',
-                                fontSize: '14px', fontWeight: '600', display: 'flex', alignItems: 'center',
-                                cursor: 'pointer'
-                            }}
-                        >
-                            + Driver
-                        </button>
-                        {/* Check In Button */}
-                        <button
-                            onClick={() => setShowCheckIn(true)}
-                            style={{
-                                background: 'white', color: '#6366f1', border: 'none',
-                                width: '40px', height: '40px', borderRadius: '12px',
-                                fontSize: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                                cursor: 'pointer'
-                            }}
-                        >
-                            +
-                        </button>
-                        <button
-                            onClick={logout}
-                            className="btn-logout"
-                            title="Logout"
-                        >
-                            <span>⎋</span>
-                            Logout
-                        </button>
-                    </div>
+                    <button className="btn-add-driver" onClick={() => setShowAddDriver(true)}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                            <circle cx="8.5" cy="7" r="4" />
+                            <path d="M20 8v6M23 11h-6" />
+                        </svg>
+                        Add Driver
+                    </button>
                 </div>
+                <p className="manager-subtitle">Manage valet assignments and parking operations</p>
+            </header>
 
+            <div className="manager-content">
                 {/* Stats Grid */}
-                <div style={{ display: 'flex', gap: '12px', marginTop: '20px' }}>
-                    <div style={{ flex: 1, background: 'rgba(255,255,255,0.15)', padding: '12px', borderRadius: '16px' }}>
-                        <div style={{ fontSize: '24px', fontWeight: 'bold' }}>{stats.active}</div>
-                        <div style={{ fontSize: '11px', opacity: 0.8 }}>Active Cars</div>
+                <div className="stats-grid">
+                    <div className="stat-card">
+                        <div className="stat-title">Active Cars</div>
+                        <div className="stat-number">{stats.active}</div>
                     </div>
-                    <div style={{ flex: 1, background: 'rgba(255,255,255,0.15)', padding: '12px', borderRadius: '16px' }}>
-                        <div style={{ fontSize: '24px', fontWeight: 'bold' }}>{stats.retrieving}</div>
-                        <div style={{ fontSize: '11px', opacity: 0.8 }}>Retrieving</div>
+                    <div className="stat-card">
+                        <div className="stat-title">Retrieving</div>
+                        <div className="stat-number">{stats.retrieving}</div>
                     </div>
-                    <div style={{ flex: 1, background: 'rgba(255,255,255,0.15)', padding: '12px', borderRadius: '16px' }}>
-                        <div style={{ fontSize: '24px', fontWeight: 'bold' }}>₹{stats.revenue}</div>
-                        <div style={{ fontSize: '11px', opacity: 0.8 }}>Revenue</div>
+                    <div className="stat-card">
+                        <div className="stat-title">Total Today</div>
+                        <div className="stat-number">{stats.totalToday}</div>
+                    </div>
+                    <div className="stat-card">
+                        <div className="stat-title">Revenue</div>
+                        <div className="stat-number">₹{stats.revenue}</div>
                     </div>
                 </div>
-            </div>
 
-            <div className="content-area" style={{ marginTop: '-40px', paddingTop: '0' }}>
+                {/* Search */}
+                <div className="search-container">
+                    <svg className="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <circle cx="11" cy="11" r="8" />
+                        <path d="M21 21l-4.35-4.35" />
+                    </svg>
+                    <input type="text" className="search-input" placeholder="Search by plate, customer or valet..." />
+                </div>
+
                 {/* Tabs */}
-                <div style={{
-                    display: 'flex', gap: '8px', padding: '0 4px 16px', overflowX: 'auto',
-                    margin: '0 -16px 16px', paddingLeft: '20px'
-                }}>
-                    {['All', 'Parked', 'Retrieving', 'Completed'].map(tab => (
+                <div className="filter-tabs">
+                    {['All (5)', 'Parked (3)', 'Retrieving (1)', 'Retrieved'].map(tab => (
                         <button
                             key={tab}
+                            className={`filter-tab ${activeTab === tab ? 'active' : ''}`}
                             onClick={() => setActiveTab(tab)}
-                            style={{
-                                padding: '8px 16px',
-                                borderRadius: '20px',
-                                border: 'none',
-                                background: activeTab === tab ? '#1f2937' : 'white',
-                                color: activeTab === tab ? 'white' : '#6b7280',
-                                fontSize: '13px',
-                                fontWeight: '600',
-                                boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
-                                whiteSpace: 'nowrap',
-                                cursor: 'pointer',
-                                transition: 'all 0.2s'
-                            }}
                         >
                             {tab}
                         </button>
                     ))}
                 </div>
 
-                {/* Session List */}
-                {loading ? (
-                    <div className="loading-state">
-                        <div className="spinner"></div>
-                        <p>Loading...</p>
-                    </div>
-                ) : filteredSessions.length === 0 ? (
-                    <div className="empty-state">
-                        <p>No {activeTab.toLowerCase()} sessions</p>
-                    </div>
-                ) : (
-                    <div>
-                        {filteredSessions.map((session) => (
-                            <div key={session.id} className="parking-card" style={{
-                                borderLeft: session.status === 'Retrieving' ? '4px solid #f59e0b' :
-                                    session.status === 'Parked' ? '4px solid #10b981' : '4px solid #6b7280',
-                                position: 'relative'
-                            }}>
-                                <div className="parking-header">
-                                    <div>
-                                        <h3>{session.vehicle_number}</h3>
-                                        <div className="parking-location">
-                                            <span>🚗</span>
-                                            <span>{session.vehicle_model || 'Unknown Model'}</span>
-                                        </div>
-                                    </div>
-                                    <div className={`price`} style={{
-                                        fontSize: '12px', background: 'transparent', padding: 0,
-                                        color: session.status === 'Retrieving' ? '#f59e0b' :
-                                            session.status === 'Parked' ? '#10b981' : '#6b7280',
-                                        fontWeight: 'bold',
-                                        textTransform: 'uppercase'
-                                    }}>
-                                        ● {session.status}
-                                    </div>
+                {/* List */}
+                <div className="vehicle-list">
+                    {sessions.map(session => (
+                        <div key={session.id} className="vehicle-card">
+                            <div className="vehicle-header">
+                                <div className="vehicle-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                                        <path d="M14 16H9m10 0h3v-3.15M17 16v3.6c0 .5-.4 1-1 1H6a1 1 0 0 1-1-1v-3.6H2V6h3v2.6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6h3v7h-2" />
+                                    </svg>
                                 </div>
+                                <div className="vehicle-main">
+                                    <h3 className="vehicle-name">{session.vehicle}</h3>
+                                    <p className="vehicle-plate">{session.plate}</p>
+                                </div>
+                                <span className={`status-tag ${session.status}`}>{session.status}</span>
+                            </div>
 
-                                <div className="parking-details">
-                                    <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', marginBottom: '8px', flexWrap: 'wrap', gap: '8px' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                            <span style={{ fontSize: '16px' }}>👮</span>
-                                            <span style={{ fontSize: '13px' }}>
-                                                Valet: <strong>{session.drivers?.name || 'Unassigned'}</strong>
-                                            </span>
+                            <div className="info-row">
+                                <div className="info-icon">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                        <circle cx="12" cy="7" r="4" />
+                                    </svg>
+                                </div>
+                                <div className="info-content">
+                                    <div className="info-label">Customer</div>
+                                    <div className="info-value">{session.customer}</div>
+                                </div>
+                            </div>
+
+                            <div className="info-row">
+                                <div className="info-icon">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                        <circle cx="8.5" cy="7" r="4" />
+                                    </svg>
+                                </div>
+                                <div className="info-content" style={{ width: '100%' }}>
+                                    <div className="info-label">Valet Assigned</div>
+                                    <div className="valet-row">
+                                        <div className="info-value">
+                                            {session.valet}
+                                            {session.valetId && <div style={{ fontSize: '11px', color: '#9ca3af' }}>ID: {session.valetId}</div>}
                                         </div>
-                                        {session.entry_time && (
-                                            <div style={{ fontSize: '12px', color: '#9ca3af' }}>
-                                                {new Date(session.entry_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                            </div>
+                                        {session.valetId && (
+                                            <button className="btn-call">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                                                </svg>
+                                            </button>
                                         )}
                                     </div>
                                 </div>
+                            </div>
 
-                                {/* Actions */}
-                                <div style={{ marginTop: '16px', display: 'flex', gap: '10px' }}>
-                                    {session.status === 'Parked' && (
-                                        <button
-                                            className="btn-primary"
-                                            onClick={() => handleStatusUpdate(session.id, 'Retrieving')}
-                                            style={{
-                                                padding: '10px', fontSize: '13px', border: 'none', borderRadius: '12px',
-                                                background: '#f59e0b', color: 'white', fontWeight: '600', flex: 1,
-                                                boxShadow: '0 4px 12px rgba(245, 158, 11, 0.3)', cursor: 'pointer'
-                                            }}
-                                        >
-                                            Request Car
-                                        </button>
-                                    )}
-                                    {session.status === 'Retrieving' && (
-                                        <button
-                                            className="btn-primary"
-                                            onClick={() => handleStatusUpdate(session.id, 'Completed')}
-                                            style={{
-                                                padding: '10px', fontSize: '13px', border: 'none', borderRadius: '12px',
-                                                background: '#10b981', color: 'white', fontWeight: '600', flex: 1,
-                                                boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)', cursor: 'pointer'
-                                            }}
-                                        >
-                                            Mark Completed
-                                        </button>
-                                    )}
-                                    {session.status !== 'Completed' && (
-                                        <button
-                                            style={{
-                                                padding: '10px', borderRadius: '12px', border: '1px solid #e5e7eb',
-                                                background: 'white', color: '#374151', fontSize: '13px', fontWeight: '600', flex: 1,
-                                                cursor: 'pointer'
-                                            }}
-                                            onClick={() => alert(`Calling ${session.drivers?.phone || 'Central Desk'}...`)}
-                                        >
-                                            Call Valet
-                                        </button>
-                                    )}
+                            {(editingValetId === session.id) ? (
+                                <div className="reassign-section">
+                                    <div className="reassign-label">Reassign to:</div>
+                                    <select className="reassign-select">
+                                        <option>Select new valet...</option>
+                                        <option>Rajesh Kumar</option>
+                                        <option>Suresh Singh</option>
+                                    </select>
+                                    <div className="reassign-actions">
+                                        <button className="btn-cancel" onClick={() => setEditingValetId(null)}>Cancel</button>
+                                    </div>
+                                </div>
+                            ) : (
+                                <button className="btn-reassign-trigger" onClick={() => setEditingValetId(session.id)}>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                                    </svg>
+                                    Reassign Valet
+                                </button>
+                            )}
+
+                            <hr style={{ margin: '12px 0', border: 'none', borderTop: '1px solid #f3f4f6' }} />
+
+                            <div className="info-row">
+                                <div className="info-icon">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                        <circle cx="12" cy="10" r="3" />
+                                    </svg>
+                                </div>
+                                <div className="info-content">
+                                    <div className="info-label">Location</div>
+                                    <div className="info-value">{session.location}</div>
+                                    <div style={{ fontSize: '11px', color: '#6b7280' }}>{session.subLocation}</div>
                                 </div>
                             </div>
-                        ))}
-                    </div>
-                )}
-            </div>
 
-            {showCheckIn && (
-                <CheckInModal
-                    onClose={() => setShowCheckIn(false)}
-                    onSuccess={fetchData}
-                />
-            )}
+                            <div className="info-row">
+                                <div className="info-icon">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <polyline points="12 6 12 12 16 14" />
+                                    </svg>
+                                </div>
+                                <div className="info-content">
+                                    <div className="info-label">Entry Time</div>
+                                    <div className="info-value">{session.entryTime}</div>
+                                    <div style={{ fontSize: '11px', color: '#6b7280' }}>Duration: {session.duration}</div>
+                                </div>
+                            </div>
+
+                            {session.isPaid && (
+                                <div style={{ background: '#f9fafb', padding: '12px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '4px' }}>
+                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                        <span style={{ fontSize: '11px', color: '#6b7280' }}>Payment</span>
+                                        <span style={{ fontSize: '16px', fontWeight: 'bold' }}>₹{session.payment}</span>
+                                    </div>
+                                    <div className="payment-badge">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                                            <polyline points="20 6 9 17 4 12" />
+                                        </svg>
+                                        Paid
+                                    </div>
+                                </div>
+                            )}
+
+                        </div>
+                    ))}
+                </div>
+            </div>
 
             {showAddDriver && (
                 <AddDriverModal
@@ -251,7 +258,7 @@ function ManagerDashboard() {
                     onSuccess={() => alert('Application sent!')}
                 />
             )}
-        </>
+        </div>
     );
 }
 

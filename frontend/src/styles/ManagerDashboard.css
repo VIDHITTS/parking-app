@@ -1,0 +1,327 @@
+/* Manager Dashboard Styling */
+
+.manager-header {
+    background: #1f2937;
+    /* Dark header match */
+    padding: 20px;
+    color: white;
+    padding-top: 50px;
+    /* Status bar space */
+}
+
+.manager-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.back-arrow {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+}
+
+.manager-title {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.btn-add-driver {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+}
+
+.manager-subtitle {
+    font-size: 13px;
+    color: #9ca3af;
+    margin: 0;
+}
+
+.manager-content {
+    padding: 20px;
+}
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.stat-card {
+    background: white;
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.stat-title {
+    font-size: 13px;
+    color: #6b7280;
+    margin-bottom: 8px;
+}
+
+.stat-number {
+    font-size: 24px;
+    font-weight: 600;
+    color: #111827;
+}
+
+/* Search Bar */
+.search-container {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.search-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px 16px 12px 44px;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    font-size: 14px;
+    outline: none;
+}
+
+/* Filter Tabs */
+.filter-tabs {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    /* Hide scrollbar visual */
+    margin-bottom: 20px;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.filter-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.filter-tab {
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    border: 1px solid #e5e7eb;
+    background: white;
+    color: #374151;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.filter-tab.active {
+    background: #1f2937;
+    color: white;
+    border-color: #1f2937;
+}
+
+/* Vehicle List Item */
+.vehicle-card {
+    background: white;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 16px;
+    border: 1px solid #e5e7eb;
+}
+
+.vehicle-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.vehicle-icon {
+    width: 40px;
+    height: 40px;
+    background: #f3f4f6;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #4b5563;
+}
+
+.vehicle-main {
+    flex: 1;
+}
+
+.vehicle-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #111827;
+    margin: 0 0 2px 0;
+}
+
+.vehicle-plate {
+    font-size: 13px;
+    color: #6b7280;
+    margin: 0;
+}
+
+.status-tag {
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+.status-tag.Parked {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.status-tag.Retrieving {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+/* Info Rows */
+.info-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.info-icon {
+    margin-top: 2px;
+    color: #9ca3af;
+    width: 16px;
+    display: flex;
+    justify-content: center;
+}
+
+.info-content {
+    flex: 1;
+}
+
+.info-label {
+    font-size: 11px;
+    color: #9ca3af;
+    margin-bottom: 2px;
+}
+
+.info-value {
+    font-size: 14px;
+    color: #1f2937;
+    font-weight: 500;
+}
+
+.valet-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn-call {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: #10b981;
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+/* Reassign Section */
+.reassign-section {
+    background: #fffbeb;
+    border: 1px solid #fcd34d;
+    border-radius: 12px;
+    padding: 12px;
+    margin: 12px 0;
+}
+
+.reassign-label {
+    font-size: 12px;
+    color: #92400e;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.reassign-select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #fcd34d;
+    border-radius: 8px;
+    background: white;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.reassign-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-cancel {
+    background: none;
+    border: none;
+    color: #6b7280;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.btn-reassign-trigger {
+    width: 100%;
+    padding: 8px;
+    background: #f3f4f6;
+    border: none;
+    border-radius: 8px;
+    color: #4b5563;
+    font-size: 13px;
+    font-weight: 500;
+    margin-top: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+/* Payment Badge */
+.payment-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 12px;
+    background: #dcfce7;
+    color: #16a34a;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+}
