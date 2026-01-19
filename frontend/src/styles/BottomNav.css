@@ -1,0 +1,65 @@
+/* Bottom Navigation Styles */
+
+.bottom-nav {
+    position: absolute;
+    /* Absolute within app-wrapper */
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 12px 16px 20px;
+    /* Extra bottom padding for safe area */
+    border-top: 1px solid #f0f0f0;
+    z-index: 99;
+    border-bottom-left-radius: 30px;
+    /* Match phone corners if visible */
+    border-bottom-right-radius: 30px;
+}
+
+/* Mobile specific override */
+@media (max-width: 767px) {
+    .bottom-nav {
+        position: fixed;
+        /* Fixed on real mobile */
+        bottom: 0;
+        /* Above role switcher which we'll handle separately or hide */
+        border-radius: 0;
+        padding-bottom: calc(12px + env(safe-area-inset-bottom));
+    }
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    text-decoration: none;
+    color: #9ca3af;
+    transition: all 0.2s ease;
+    padding: 6px 16px;
+    border-radius: 8px;
+    flex: 1;
+}
+
+.nav-item.active {
+    color: #4f46e5;
+}
+
+.nav-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.nav-label {
+    font-size: 11px;
+    font-weight: 500;
+}

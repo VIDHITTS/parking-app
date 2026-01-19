@@ -1,13 +1,23 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { sitesService, driverService, parkingService } from '../services/api';
+import '../styles/SuperAdminDashboard.css';
 
 function SuperAdminDashboard() {
     const { logout, user } = useAuth();
+    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('Overview');
     const [sites, setSites] = useState([]);
     const [selectedSite, setSelectedSite] = useState(null);
-    const [stats, setStats] = useState({ active: 0, revenue: 0, retrieving: 0 });
+    const [selectedSiteData, setSelectedSiteData] = useState(null);
+    const [stats, setStats] = useState({
+        todayTickets: 87,
+        todayCollection: 13050,
+        totalTickets: 1247,
+        totalCollection: 186450,
+        activeParking: 45
+    });
     const [pendingDrivers, setPendingDrivers] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -18,9 +28,11 @@ function SuperAdminDashboard() {
 
     useEffect(() => {
         if (selectedSite) {
+            const site = sites.find(s => s.id === selectedSite);
+            setSelectedSiteData(site);
             fetchStats();
         }
-    }, [selectedSite]);
+    }, [selectedSite, sites]);
 
     const fetchSites = async () => {
         try {
@@ -35,8 +47,13 @@ function SuperAdminDashboard() {
     const fetchStats = async () => {
         try {
             const { data } = await parkingService.getStats();
-            // Note: Backend getStats is currently global, but we would pass selectedSite in future
-            if (data.success) setStats(data.stats);
+            if (data.success) {
+                setStats(prev => ({
+                    ...prev,
+                    activeParking: data.stats.active || prev.activeParking,
+                    todayCollection: data.stats.revenue || prev.todayCollection
+                }));
+            }
         } catch (err) {
             console.error(err);
         }
@@ -74,130 +91,168 @@ function SuperAdminDashboard() {
     };
 
     return (
-        <div className="dashboard-container">
+        <div className="super-admin-container">
             {/* Header */}
-            <header className="dashboard-header">
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div>
-                        <h1>Super Admin</h1>
-                        <div className="subtitle">System Overview</div>
-                    </div>
-                    <button
-                        onClick={logout}
-                        className="btn-logout"
-                        title="Logout"
-                    >
-                        <span>⎋</span>
-                        Logout
+            <header className="super-admin-header">
+                <div className="header-top">
+                    <button className="back-btn" onClick={() => navigate(-1)}>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7" />
+                        </svg>
                     </button>
+                    <div className="header-title">
+                        <h1>Super Admin</h1>
+                        <p className="header-subtitle">System overview and approvals</p>
+                    </div>
                 </div>
 
                 {/* Tabs */}
-                <div style={{ display: 'flex', gap: '16px', marginTop: '20px' }}>
-                    {['Overview', 'Approvals'].map(tab => (
-                        <button
-                            key={tab}
-                            onClick={() => setActiveTab(tab)}
-                            style={{
-                                padding: '8px 16px',
-                                borderRadius: '8px',
-                                border: 'none',
-                                background: activeTab === tab ? 'white' : 'rgba(255,255,255,0.1)',
-                                color: activeTab === tab ? '#6366f1' : 'white',
-                                fontWeight: '600',
-                                cursor: 'pointer'
-                            }}
-                        >
-                            {tab}
-                            {tab === 'Approvals' && pendingDrivers.length > 0 && (
-                                <span style={{
-                                    marginLeft: '8px', background: '#ef4444', color: 'white',
-                                    padding: '2px 6px', borderRadius: '10px', fontSize: '10px'
-                                }}>
-                                    {pendingDrivers.length}
-                                </span>
-                            )}
-                        </button>
-                    ))}
+                <div className="tabs-container">
+                    <button
+                        className={`tab-btn ${activeTab === 'Overview' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('Overview')}
+                    >
+                        Overview
+                    </button>
+                    <button
+                        className={`tab-btn ${activeTab === 'Approvals' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('Approvals')}
+                    >
+                        Approvals
+                        {pendingDrivers.length > 0 && (
+                            <span className="badge">{pendingDrivers.length}</span>
+                        )}
+                    </button>
                 </div>
             </header>
 
-            <main className="dashboard-content" style={{ marginTop: '-20px' }}>
-
+            <main className="super-admin-content">
                 {activeTab === 'Overview' && (
                     <>
                         {/* Site Selector */}
-                        <div style={{ marginBottom: '24px' }}>
-                            <select
-                                value={selectedSite || ''}
-                                onChange={(e) => setSelectedSite(e.target.value)}
-                                style={{
-                                    width: '100%', padding: '12px', borderRadius: '12px',
-                                    border: '1px solid #e5e7eb', fontSize: '16px'
-                                }}
-                            >
-                                {sites.map(site => (
-                                    <option key={site.id} value={site.id}>{site.name}</option>
-                                ))}
-                            </select>
+                        <div className="site-selector-section">
+                            <label className="section-label">Select Site</label>
+                            <div className="select-wrapper">
+                                <select
+                                    value={selectedSite || ''}
+                                    onChange={(e) => setSelectedSite(e.target.value)}
+                                    className="site-select"
+                                >
+                                    {sites.map(site => (
+                                        <option key={site.id} value={site.id}>{site.name}</option>
+                                    ))}
+                                </select>
+                                <svg className="select-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                    <path d="M6 9l6 6 6-6" />
+                                </svg>
+                            </div>
                         </div>
 
-                        {/* Stats */}
-                        <div className="stats-grid">
-                            <div className="stat-card">
-                                <h3>Revenue</h3>
-                                <div className="value">₹{stats.revenue}</div>
+                        {/* Today's Performance */}
+                        <div className="performance-section">
+                            <div className="section-header">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                                    <line x1="16" y1="2" x2="16" y2="6" />
+                                    <line x1="8" y1="2" x2="8" y2="6" />
+                                    <line x1="3" y1="10" x2="21" y2="10" />
+                                </svg>
+                                <span>Today's Performance</span>
                             </div>
-                            <div className="stat-card">
-                                <h3>Active</h3>
-                                <div className="value">{stats.active}</div>
-                            </div>
-                            <div className="stat-card">
-                                <h3>Retrieving</h3>
-                                <div className="value">{stats.retrieving}</div>
+                            <div className="performance-cards">
+                                <div className="performance-card">
+                                    <span className="perf-label">Tickets Issued</span>
+                                    <span className="perf-value purple">{stats.todayTickets}</span>
+                                </div>
+                                <div className="performance-card">
+                                    <span className="perf-label">Collection</span>
+                                    <span className="perf-value green">₹{stats.todayCollection.toLocaleString()}</span>
+                                </div>
                             </div>
                         </div>
+
+                        {/* Overall Statistics */}
+                        <div className="stats-section">
+                            <div className="section-header">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                                </svg>
+                                <span>Overall Statistics</span>
+                            </div>
+
+                            <div className="stat-row">
+                                <div className="stat-icon purple-bg">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="2">
+                                        <rect x="2" y="4" width="20" height="16" rx="2" />
+                                        <path d="M7 8h4M7 12h10M7 16h6" />
+                                    </svg>
+                                </div>
+                                <span className="stat-label">Total Tickets</span>
+                                <span className="stat-value">{stats.totalTickets.toLocaleString()}</span>
+                            </div>
+
+                            <div className="stat-row">
+                                <div className="stat-icon blue-bg">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2">
+                                        <line x1="12" y1="1" x2="12" y2="23" />
+                                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                                    </svg>
+                                </div>
+                                <span className="stat-label">Total Collection</span>
+                                <span className="stat-value">₹{stats.totalCollection.toLocaleString()}</span>
+                            </div>
+
+                            <div className="stat-row">
+                                <div className="stat-icon green-bg">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                        <circle cx="12" cy="10" r="3" />
+                                    </svg>
+                                </div>
+                                <span className="stat-label">Active Parking</span>
+                                <span className="stat-value">{stats.activeParking}</span>
+                            </div>
+                        </div>
+
+                        {/* Site Info Card */}
+                        {selectedSiteData && (
+                            <div className="site-info-card">
+                                <h3 className="site-name">{selectedSiteData.name}</h3>
+                                <p className="site-location">{selectedSiteData.location}</p>
+                            </div>
+                        )}
                     </>
                 )}
 
                 {activeTab === 'Approvals' && (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                    <div className="approvals-list">
                         {pendingDrivers.length === 0 ? (
-                            <div style={{ textAlign: 'center', padding: '40px', color: '#6b7280' }}>
-                                All caught up! No pending applications.
+                            <div className="empty-state">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="1.5">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <p>All caught up! No pending applications.</p>
                             </div>
                         ) : (
                             pendingDrivers.map(driver => (
-                                <div key={driver.id} style={{
-                                    background: 'white', padding: '16px', borderRadius: '16px',
-                                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                                }}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
+                                <div key={driver.id} className="approval-card">
+                                    <div className="approval-header">
                                         <div>
-                                            <h3 style={{ margin: 0, fontSize: '18px' }}>{driver.full_name}</h3>
-                                            <div style={{ color: '#6b7280', fontSize: '14px' }}>{driver.license_number}</div>
+                                            <h3 className="driver-name">{driver.full_name}</h3>
+                                            <p className="driver-license">{driver.license_number}</p>
                                         </div>
-                                        <div style={{ background: '#fef3c7', color: '#d97706', padding: '4px 8px', borderRadius: '6px', height: 'fit-content', fontSize: '12px', fontWeight: 'bold' }}>
-                                            PENDING
-                                        </div>
+                                        <span className="pending-badge">PENDING</span>
                                     </div>
-
-                                    <div style={{ display: 'flex', gap: '8px' }}>
+                                    <div className="approval-actions">
                                         <button
+                                            className="approve-btn"
                                             onClick={() => handleApprove(driver.id)}
-                                            style={{
-                                                flex: 1, padding: '10px', background: '#dcfce7', color: '#15803d',
-                                                border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer'
-                                            }}
                                         >
                                             Approve
                                         </button>
                                         <button
+                                            className="reject-btn"
                                             onClick={() => handleReject(driver.id)}
-                                            style={{
-                                                flex: 1, padding: '10px', background: '#fee2e2', color: '#b91c1c',
-                                                border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer'
-                                            }}
                                         >
                                             Reject
                                         </button>

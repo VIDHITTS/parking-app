@@ -1,12 +1,14 @@
 :root {
-  --primary-purple: #6366f1;
-  --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-  --success: #10b981;
-  --success-light: #d1fae5;
-  --text-dark: #1f2937;
+  --primary-purple: #4f46e5;
+  --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+  --success: #16a34a;
+  --success-light: #dcfce7;
+  --warning: #d97706;
+  --warning-light: #fef3c7;
+  --text-dark: #111827;
   --text-gray: #6b7280;
   --text-light: #9ca3af;
-  --bg-gray: #f3f4f6;
+  --bg-light: #f8f7fc;
   --white: #ffffff;
   --border: #e5e7eb;
 }
@@ -19,7 +21,7 @@
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-  background: #ffffff;
+  background: #e5e7eb;
   color: var(--text-dark);
   min-height: 100vh;
 }
@@ -27,122 +29,64 @@ body {
 #root {
   width: 100%;
   min-height: 100vh;
-  background: #ffffff;
 }
 
-/* Mobile App Container - Responsive */
+/* Mobile App Container */
 .app-wrapper {
   width: 100%;
   max-width: 100%;
-  background: var(--white);
+  min-height: 100vh;
+  background: var(--bg-light);
   margin: 0 auto;
   position: relative;
-  /* Ensure this container can hold absolute positioned bottom nav */
+  overflow: hidden;
+  /* For absolute positioning containment */
   display: flex;
   flex-direction: column;
 }
 
-/* Desktop: Center with max-width */
-@media (min-width: 768px) {
-  body {
-    background: #e5e7eb;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 20px;
-    /* Prevent body scroll on desktop if phone fits */
-    overflow: hidden;
-  }
-
-  .app-wrapper {
-    max-width: 400px;
-    /* Slightly narrower per request */
-    height: 800px;
-    /* Fixed height for phone look */
-    /* Remove min-height */
-    box-shadow: 0 0 40px rgba(0, 0, 0, 0.2);
-    border: 12px solid #1f2937;
-    border-radius: 40px;
-    overflow: hidden;
-    /* Contains the scroll and bottom nav */
-  }
-
-  /* Make content scrollable inside the fixed height wrapper */
-  .content-area,
-  .auth-content {
-    flex: 1;
-    overflow-y: auto;
-    /* Hide scrollbar for cleaner look */
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-
-  .content-area::-webkit-scrollbar,
-  .auth-content::-webkit-scrollbar {
-    display: none;
-  }
-}
-
-/* Purple Gradient Header */
-.hero-header {
-  background: var(--primary-gradient);
-  padding: 20px 20px 28px;
-  color: white;
-  flex-shrink: 0;
-  /* Keep header from shrinking */
-}
-
-/* ... existing styles for header text ... */
-
-/* Scan and Parking Cards (no changes needed) */
-
-/* Content Area */
-.content-area {
-  padding: 0 16px 90px;
+.app-content {
   flex: 1;
   overflow-y: auto;
+  padding-bottom: 90px;
+  /* Space for bottom nav */
   /* Hide scrollbar */
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
 
-.content-area::-webkit-scrollbar {
+.app-content::-webkit-scrollbar {
   display: none;
 }
 
-/* Bottom Navigation */
-.bottom-nav {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 80px;
-  /* Slightly taller for better touch targets */
-  background: rgba(255, 255, 255, 0.95);
-  /* Slight transparency */
-  backdrop-filter: blur(10px);
-  /* Glassmorphism effect */
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 0 10px 15px;
-  /* Adjust padding to sit nicely */
-  z-index: 1000;
-  border-bottom-left-radius: 28px;
-  border-bottom-right-radius: 28px;
-  box-sizing: border-box;
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.03);
-  /* Subtle upward shadow */
+/* Desktop: Center with phone-like look */
+@media (min-width: 768px) {
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px 140px;
+    /* Extra bottom padding for role switcher */
+    min-height: 100vh;
+  }
+
+  .app-wrapper {
+    max-width: 400px;
+    height: 800px;
+    min-height: auto;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.15);
+    border: 12px solid #1f2937;
+    border-radius: 40px;
+    overflow: hidden;
+    /* Clips children to rounded corners */
+    position: relative;
+    background: white;
+  }
 }
 
-/* No desktop specific override needed for .bottom-nav width/position 
-   because it's now absolute inside the 400px wrapper */
-
-/* Form Elements Premium Redesign */
+/* Form Elements */
 .form-group {
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 .form-group label {
@@ -151,240 +95,101 @@ body {
   font-weight: 600;
   font-size: 13px;
   color: var(--text-dark);
-  letter-spacing: 0.3px;
-  margin-left: 4px;
-  /* Align with input curve */
 }
 
 .form-group input,
 .form-group select {
   width: 100%;
-  padding: 16px 20px;
-  border: 2px solid transparent;
-  /* Prepare for focus border */
-  border-radius: 16px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
   font-size: 15px;
-  font-weight: 500;
-  background: #f9fafb;
+  background: var(--white);
   color: var(--text-dark);
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+  transition: all 0.2s ease;
 }
 
 .form-group input:focus,
 .form-group select:focus {
   outline: none;
-  background: #ffffff;
   border-color: var(--primary-purple);
-  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
 }
 
 .form-group input::placeholder {
-  color: #9ca3af;
-  font-weight: 400;
+  color: var(--text-light);
 }
 
-/* Buttons Premium Redesign */
+/* Primary Button */
 .btn-primary {
   width: 100%;
-  padding: 18px;
+  padding: 16px;
   background: var(--primary-gradient);
   color: white;
   border: none;
-  border-radius: 18px;
-  /* Softer, rounder buttons */
+  border-radius: 14px;
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.4);
-  /* Nice purple glow shadow */
-  letter-spacing: 0.5px;
-  position: relative;
-  overflow: hidden;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 15px 25px -5px rgba(99, 102, 241, 0.5);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(79, 70, 229, 0.4);
 }
 
 .btn-primary:active {
   transform: scale(0.98);
-  box-shadow: 0 5px 15px -3px rgba(99, 102, 241, 0.4);
 }
 
 .btn-primary:disabled {
   opacity: 0.6;
   cursor: not-allowed;
   transform: none;
-  box-shadow: none;
-}
-
-.auth-link {
-  text-align: center;
-  margin-top: 24px;
-  font-size: 14px;
-  color: var(--text-gray);
-}
-
-.auth-link a {
-  color: var(--primary-purple);
-  font-weight: 700;
-  text-decoration: none;
-}
-
-/* Parking Card Premium */
-.parking-card {
-  background: var(--white);
-  border: 1px solid rgba(0, 0, 0, 0.04);
-  /* Very subtle border */
-  border-radius: 20px;
-  /* Match button roundness */
-  padding: 20px;
-  margin-bottom: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-  /* Soft floating shadow */
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.parking-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
-}
-
-.parking-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 16px;
-  padding-bottom: 16px;
-  border-bottom: 1px dashed rgba(0, 0, 0, 0.06);
-  /* Divider */
-}
-
-.parking-header h3 {
-  font-size: 17px;
-  margin-bottom: 6px;
-  font-weight: 700;
-  color: #111827;
-}
-
-.parking-location {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  color: #6b7280;
-  margin-bottom: 0;
-  font-weight: 500;
-}
-
-.parking-details {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-  font-size: 13px;
-  color: #4b5563;
-  flex-wrap: wrap;
-  font-weight: 500;
-}
-
-.price {
-  font-size: 20px;
-  font-weight: 800;
-  color: var(--primary-purple);
-  background: rgba(99, 102, 241, 0.08);
-  /* Highlight price */
-  padding: 6px 12px;
-  border-radius: 10px;
 }
 
 /* Alert Error */
 .alert-error {
   background: #fee2e2;
   color: #991b1b;
-  padding: 16px;
-  border-radius: 16px;
-  margin-bottom: 24px;
+  padding: 14px;
+  border-radius: 12px;
+  margin-bottom: 20px;
   font-size: 14px;
   text-align: center;
   font-weight: 500;
-  border: 1px solid #fecaca;
 }
 
-/* Navigation Items */
-.nav-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  color: #9ca3af;
-  /* Lighter gray for inactive */
-  text-decoration: none;
-  font-size: 10px;
-  font-weight: 500;
-  padding: 8px;
-  border-radius: 12px;
-  transition: all 0.2s ease;
-  flex: 1;
-  max-width: 70px;
+/* Loading Spinner */
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--border);
+  border-top-color: var(--primary-purple);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }
 
-.nav-item.active {
-  color: var(--primary-purple);
-  background: rgba(99, 102, 241, 0.08);
-  /* Subtle active background */
-  transform: translateY(-2px);
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-.nav-item svg {
-  width: 24px;
-  /* Slightly larger icons */
-  height: 24px;
-  stroke-width: 2.5px;
-}
-
-/* Auth Pages */
-/* Ensure auth container fills the wrapper */
-.auth-container {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  background: var(--white);
-}
-
-.auth-header {
-  background: var(--primary-gradient);
-  padding: 40px 24px;
-  text-align: center;
-  color: white;
-  /* Adjust flexibility */
-  flex: 0 0 auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  min-height: 220px;
-}
-
-/* Other styles remaining same */
-
-/* Mobile-specific adjustments */
+/* Mobile adjustments */
 @media (max-width: 767px) {
   .app-wrapper {
-    min-height: 100vh;
     border: none;
     border-radius: 0;
+    height: 100vh;
+    overflow: hidden;
+    /* Handle scrolling internally */
   }
 
-  .bottom-nav {
-    position: fixed;
-    /* Fixed on real mobile */
-    padding-bottom: env(safe-area-inset-bottom);
-  }
-
-  .content-area {
-    padding-bottom: 80px;
+  .app-content {
+    padding-bottom: 180px;
+    /* Space for nav + fixed role switcher on mobile */
   }
 }

@@ -1,73 +1,41 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
-import ProtectedRoute from './components/ProtectedRoute';
 import BottomNav from './components/BottomNav';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
+import RoleSwitcher from './components/RoleSwitcher';
 import Home from './pages/Home';
 import Drivers from './pages/Drivers';
 import Cars from './pages/Cars';
 import History from './pages/History';
-import AdminDashboard from './pages/AdminDashboard';
+import Settings from './pages/Settings';
+import SuperAdminDashboard from './pages/SuperAdminDashboard';
+import ManagerDashboard from './pages/ManagerDashboard';
 import './styles/theme.css';
 
 function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
+        {/* Main App Container (The Phone) */}
         <div className="app-wrapper">
-          <Routes>
-            <Route path="/" element={<Navigate to="/login" replace />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-
-            <Route
-              path="/home"
-              element={
-                <ProtectedRoute>
-                  <Home />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
-              path="/drivers"
-              element={
-                <ProtectedRoute>
-                  <Drivers />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
-              path="/cars"
-              element={
-                <ProtectedRoute>
-                  <Cars />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
-              path="/history"
-              element={
-                <ProtectedRoute>
-                  <History />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
-              path="/admin"
-              element={
-                <ProtectedRoute>
-                  <AdminDashboard />
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
+          <div className="app-content">
+            <Routes>
+              <Route path="/" element={<Navigate to="/home" replace />} />
+              <Route path="/home" element={<Home />} />
+              <Route path="/drivers" element={<Drivers />} />
+              <Route path="/cars" element={<Cars />} />
+              <Route path="/history" element={<History />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/admin" element={<SuperAdminDashboard />} />
+              <Route path="/super-admin" element={<SuperAdminDashboard />} />
+              <Route path="/manager" element={<ManagerDashboard />} />
+            </Routes>
+          </div>
+          {/* Bottom Nav is part of the phone UI */}
           <BottomNav />
         </div>
+
+        {/* Role Switcher is a debug tool OUTSIDE the app/phone */}
+        <RoleSwitcher />
       </BrowserRouter>
     </AuthProvider>
   );

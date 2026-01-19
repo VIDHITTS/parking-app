@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import '../styles/UserScanner.css';
 
 function UserScanner() {
-    const { logout } = useAuth();
+    const { user } = useAuth();
     const [scanning, setScanning] = useState(false);
     const [scannedData, setScannedData] = useState(null);
 
@@ -27,34 +28,33 @@ function UserScanner() {
 
     if (scannedData) {
         return (
-            <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '80vh' }}>
-                <div style={{ background: 'white', padding: '32px', borderRadius: '24px', width: '100%', maxWidth: '300px', textAlign: 'center', boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }}>
-                    <div style={{ width: '60px', height: '60px', background: '#d1fae5', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
-                        <span style={{ fontSize: '32px' }}>✅</span>
+            <div className="scanner-container">
+                <div className="scanner-result">
+                    <div className="success-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2.5">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                            <polyline points="22 4 12 14.01 9 11.01" />
+                        </svg>
                     </div>
-                    <h2 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '8px' }}>Ticket Verified</h2>
-                    <p style={{ color: '#6b7280', marginBottom: '24px' }}>Session Active</p>
+                    <h2>Ticket Verified</h2>
+                    <p className="status-text">Session Active</p>
 
-                    <div style={{ background: '#f9fafb', padding: '16px', borderRadius: '16px', marginBottom: '24px', textAlign: 'left' }}>
-                        <div style={{ marginBottom: '12px' }}>
-                            <div style={{ fontSize: '12px', color: '#9ca3af' }}>VEHICLE NO</div>
-                            <div style={{ fontSize: '16px', fontWeight: 'bold' }}>{scannedData.vehicle}</div>
+                    <div className="ticket-details">
+                        <div className="detail-row">
+                            <span className="detail-label">VEHICLE NO</span>
+                            <span className="detail-value">{scannedData.vehicle}</span>
                         </div>
-                        <div style={{ marginBottom: '12px' }}>
-                            <div style={{ fontSize: '12px', color: '#9ca3af' }}>MODEL</div>
-                            <div style={{ fontSize: '16px', fontWeight: 'bold' }}>{scannedData.model}</div>
+                        <div className="detail-row">
+                            <span className="detail-label">MODEL</span>
+                            <span className="detail-value">{scannedData.model}</span>
                         </div>
-                        <div>
-                            <div style={{ fontSize: '12px', color: '#9ca3af' }}>ENTRY TIME</div>
-                            <div style={{ fontSize: '16px', fontWeight: 'bold' }}>{scannedData.entryTime}</div>
+                        <div className="detail-row">
+                            <span className="detail-label">ENTRY TIME</span>
+                            <span className="detail-value">{scannedData.entryTime}</span>
                         </div>
                     </div>
 
-                    <button
-                        onClick={reset}
-                        className="btn-primary"
-                        style={{ width: '100%' }}
-                    >
+                    <button onClick={reset} className="btn-primary">
                         Scan Another
                     </button>
                 </div>
@@ -63,43 +63,37 @@ function UserScanner() {
     }
 
     return (
-        <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '80vh', position: 'relative' }}>
-            <button onClick={logout} className="btn-logout" style={{ position: 'absolute', top: '20px', right: '20px', padding: '0 12px !important' }}>
-                ⎋ Logout
-            </button>
+        <div className="scanner-container">
+            <header className="scanner-header">
+                <h1>Welcome, {user?.name}</h1>
+                <p>Scan to check your parking status</p>
+            </header>
 
-            <h1 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '40px' }}>Scan Ticket</h1>
+            <div className="scanner-content">
+                <h2 className="scan-title">Scan Ticket</h2>
 
-            <button
-                onClick={handleScan}
-                style={{
-                    width: '200px',
-                    height: '200px',
-                    borderRadius: '40px',
-                    background: scanning ? '#e5e7eb' : 'var(--primary-gradient)',
-                    border: 'none',
-                    boxShadow: scanning ? 'none' : '0 20px 50px rgba(99, 102, 241, 0.4)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    transition: 'all 0.3s ease',
-                    transform: scanning ? 'scale(0.95)' : 'scale(1)'
-                }}
-            >
-                {scanning ? (
-                    <div className="spinner" style={{ width: '40px', height: '40px', border: '4px solid #9ca3af', borderTopColor: 'transparent' }}></div>
-                ) : (
-                    <>
-                        <span style={{ fontSize: '48px', marginBottom: '12px' }}>📷</span>
-                        <span style={{ color: 'white', fontWeight: '600', fontSize: '18px' }}>Scan QR</span>
-                    </>
-                )}
-            </button>
+                <button
+                    onClick={handleScan}
+                    className={`scan-button ${scanning ? 'scanning' : ''}`}
+                    disabled={scanning}
+                >
+                    {scanning ? (
+                        <div className="spinner"></div>
+                    ) : (
+                        <>
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5">
+                                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                                <circle cx="12" cy="13" r="4" />
+                            </svg>
+                            <span>Scan QR</span>
+                        </>
+                    )}
+                </button>
 
-            <p style={{ marginTop: '24px', color: '#6b7280', textAlign: 'center', maxWidth: '280px' }}>
-                {scanning ? 'Searching database...' : 'Point your camera at the vehicle QR code'}
-            </p>
+                <p className="scan-hint">
+                    {scanning ? 'Searching database...' : 'Point your camera at the vehicle QR code'}
+                </p>
+            </div>
         </div>
     );
 }

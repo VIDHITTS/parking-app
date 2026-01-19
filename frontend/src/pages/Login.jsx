@@ -73,8 +73,10 @@ function Login() {
           </div>
 
           <div style={{ marginTop: '30px', padding: '16px', background: '#f9fafb', borderRadius: '12px', fontSize: '13px' }}>
-            <div style={{ marginBottom: '8px' }}><strong>Admin:</strong> password is admin123</div>
-            <div><strong>Manager:</strong> password is manager123</div>
+            <div style={{ fontWeight: 'bold', marginBottom: '10px', color: '#374151' }}>Demo Credentials:</div>
+            <div style={{ marginBottom: '6px' }}><strong>Super Admin:</strong> superadmin@test.com / admin123</div>
+            <div style={{ marginBottom: '6px' }}><strong>Manager:</strong> manager@test.com / manager123</div>
+            <div><strong>Driver:</strong> driver@test.com / driver123</div>
           </div>
         </div>
       </div>

@@ -1,0 +1,99 @@
+/* Role Switcher Styles */
+
+.role-switcher-container {
+    background: white;
+    border-top: 1px solid #e5e7eb;
+    padding: 16px;
+    z-index: 100;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+}
+
+/* Desktop: Position specifically below the phone wrapper */
+@media (min-width: 768px) {
+    .role-switcher-container {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        max-width: 500px;
+        border-radius: 20px;
+        border: 1px solid #e5e7eb;
+    }
+}
+
+/* Mobile: Fixed at bottom */
+@media (max-width: 767px) {
+    .role-switcher-container {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+}
+
+.role-switcher-label {
+    text-align: center;
+    font-size: 13px;
+    color: #6b7280;
+    margin-bottom: 12px;
+    font-weight: 500;
+}
+
+.role-switcher-options {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.role-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    background: #f9fafb;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 70px;
+    flex: 1;
+}
+
+.role-option:hover {
+    border-color: #4f46e5;
+    background: white;
+    transform: translateY(-2px);
+}
+
+.role-option.active {
+    background: #4f46e5;
+    border-color: #4f46e5;
+    color: white;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+}
+
+.role-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 24px;
+}
+
+.role-icon svg {
+    width: 24px;
+    height: 24px;
+    stroke: #6b7280;
+    stroke-width: 1.5;
+}
+
+.role-option.active .role-icon svg {
+    stroke: white;
+}
+
+.role-label {
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}
