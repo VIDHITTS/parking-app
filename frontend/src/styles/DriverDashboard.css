@@ -1,18 +1,40 @@
 /* Driver Dashboard Styling */
 
-/* Header Override for Driver */
+.driver-container {
+    padding-bottom: 20px;
+}
+
+/* Header */
 .driver-header {
-    background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
-    padding: 24px 20px 32px;
+    background: #4338ca;
+    /* Indigo 700 - Deep Blue/Purple */
+    padding: 50px 20px 24px;
+    /* Increased top padding for safe area */
     color: white;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 24px;
+    border-bottom-right-radius: 24px;
+    position: relative;
+    /* Screenshot shows flat color, maybe slight gradient */
+    background: linear-gradient(180deg, #4f46e5 0%, #4338ca 100%);
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.driver-title {
+    font-size: 15px;
+    opacity: 0.9;
+    margin-bottom: 8px;
+    font-weight: 400;
 }
 
 .driver-welcome {
-    font-size: 14px;
-    margin-bottom: 4px;
-    opacity: 0.9;
+    font-size: 13px;
+    opacity: 0.8;
+    margin-bottom: 2px;
 }
 
 .driver-name {
@@ -20,25 +42,16 @@
     font-weight: 600;
 }
 
-/* Notification Bell */
 .notification-bell {
-    position: absolute;
-    top: 24px;
-    right: 20px;
-    background: rgba(255, 255, 255, 0.2);
+    position: relative;
     padding: 8px;
-    border-radius: 50%;
     cursor: pointer;
-}
-
-.notification-bell svg {
-    display: block;
 }
 
 .notification-badge {
     position: absolute;
-    top: -2px;
-    right: -2px;
+    top: 4px;
+    right: 4px;
     background: #ef4444;
     color: white;
     font-size: 10px;
@@ -48,154 +61,223 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid #3730a3;
+    border: 2px solid #4338ca;
+    font-weight: bold;
 }
 
-/* Main Content Overlay */
+/* Content */
 .driver-content {
-    margin-top: -20px;
-    padding: 0 16px;
+    padding: 20px;
 }
 
-/* Current Task Card */
-.task-card {
+/* New Assignments Section */
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    color: #1f2937;
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.new-assignment-card {
     background: white;
     border-radius: 16px;
-    padding: 20px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 16px;
+    border: 1px solid #e0e7ff;
+    /* Light blue border */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
     margin-bottom: 24px;
 }
 
-.car-header {
+.assignment-header {
     display: flex;
-    align-items: center;
-    gap: 16px;
+    gap: 12px;
     margin-bottom: 16px;
 }
 
-.car-icon-box {
-    width: 56px;
-    height: 56px;
+.assignment-icon-box {
+    width: 48px;
+    height: 48px;
     background: #e0e7ff;
     border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.car-icon-box svg {
     color: #4f46e5;
 }
 
-.car-info h2 {
-    font-size: 18px;
+.assignment-info h3 {
+    font-size: 16px;
     font-weight: 600;
     color: #1f2937;
+    margin: 0 0 2px 0;
+}
+
+.assignment-info p {
+    font-size: 13px;
+    color: #6b7280;
+    margin: 0 0 6px 0;
+}
+
+.badge-retrieve {
+    background: #fef3c7;
+    color: #d97706;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+.btn-accept {
+    width: 100%;
+    background: #6366f1;
+    /* Lighter Indigo */
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    cursor: pointer;
+}
+
+/* Current Assignment */
+.current-assignment-card {
+    background: white;
+    padding: 24px 20px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    /* Softer shadow */
+}
+
+.car-detail-header {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.car-icon-large {
+    width: 64px;
+    height: 64px;
+    background: #e0e7ff;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #4f46e5;
+}
+
+.car-title h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #111827;
     margin: 0 0 4px 0;
 }
 
-.car-info p {
+.car-plate {
     font-size: 14px;
-    color: #6b7280;
-    margin: 0;
+    color: #4b5563;
+    margin-bottom: 8px;
+    display: block;
 }
 
-.park-badge {
-    display: block;
-    margin-top: 8px;
+.badge-park {
     background: #dcfce7;
     color: #16a34a;
     font-size: 12px;
     font-weight: 600;
     padding: 4px 10px;
     border-radius: 6px;
-    width: fit-content;
 }
 
-/* Task Details */
-.task-detail-row {
+/* Timeline/Details List */
+.details-list {
+    margin-top: 24px;
+    border-top: 1px solid #f3f4f6;
+    padding-top: 24px;
+}
+
+.detail-item {
     display: flex;
     gap: 16px;
-    margin-bottom: 16px;
-    align-items: flex-start;
+    margin-bottom: 24px;
 }
 
-.task-icon {
-    margin-top: 2px;
+.detail-icon {
     color: #9ca3af;
+    margin-top: 2px;
 }
 
-.task-text p {
-    margin: 0;
+.detail-content {
+    flex: 1;
 }
 
-.task-label {
+.detail-label {
     font-size: 12px;
     color: #6b7280;
     margin-bottom: 2px;
 }
 
-.task-value {
+.detail-value {
     font-size: 15px;
     font-weight: 500;
     color: #1f2937;
 }
 
-.task-value-sub {
+.detail-sub {
     font-size: 13px;
     color: #4b5563;
 }
 
-/* Action Button */
-.btn-action-main {
+.btn-start-parking {
     width: 100%;
     background: #4f46e5;
     color: white;
-    padding: 16px;
-    border-radius: 12px;
+    padding: 18px;
     border: none;
+    border-radius: 14px;
     font-size: 16px;
     font-weight: 600;
-    margin-top: 8px;
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
-    transition: transform 0.2s;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
 }
 
-.btn-action-main:active {
-    transform: scale(0.98);
-}
-
-/* Bottom Stats */
-.driver-stats-row {
+/* Stats */
+.stats-row {
     display: flex;
     justify-content: space-between;
-    padding: 0 20px;
-    margin-top: 40px;
+    padding: 0 40px;
+    /* Indent stats */
+    margin-top: 32px;
 }
 
-.stat-item {
+.stat-box {
     text-align: center;
 }
 
-.stat-label {
-    display: block;
+.stat-title {
     font-size: 13px;
     color: #6b7280;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
 }
 
-.stat-value {
-    display: block;
-    font-size: 20px;
-    font-weight: 600;
+.stat-num {
+    font-size: 24px;
+    font-weight: 500;
     color: #1f2937;
 }
 
-.stat-value.green {
+.stat-num.green {
     color: #16a34a;
 }
 
-.stat-value.orange {
+.stat-num.orange {
     color: #f59e0b;
 }
