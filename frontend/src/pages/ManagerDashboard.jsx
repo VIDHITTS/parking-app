@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { parkingService } from '../services/api';
+import { parkingService, driverService } from '../services/api'; // Added driverService
 import AddDriverModal from '../components/AddDriverModal';
 import { useAuth } from '../contexts/AuthContext';
 import { getHomePathForRole } from '../App';
@@ -11,54 +11,109 @@ function ManagerDashboard() {
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('All');
     const [showAddDriver, setShowAddDriver] = useState(false);
-    const [editingValetId, setEditingValetId] = useState(null); // ID of session being edited
 
-    // Hardcoded Demo state to match screenshot perfectly for now
-    const [stats] = useState({
-        active: 3,
-        retrieving: 1,
-        totalToday: 5,
-        revenue: 825
+    const [stats, setStats] = useState({
+        active: 0,
+        retrieving: 0,
+        totalToday: 0,
+        revenue: 0
     });
+    const [sessions, setSessions] = useState([]);
+    const [drivers, setDrivers] = useState([]); // List of active drivers
+    const [loading, setLoading] = useState(true);
 
-    const [sessions, setSessions] = useState([
-        {
-            id: '1',
-            vehicle: 'Honda City',
-            plate: 'MH02AB1234',
-            customer: 'Amit Sharma',
-            valet: 'Rajesh Kumar',
-            valetId: 'V001',
-            location: 'Phoenix Mall',
-            subLocation: 'Lower Parel, Mumbai',
-            status: 'Parked',
-            entryTime: '19 Jan at 08:18 PM',
-            duration: '2h 0m',
-            payment: 150,
-            isPaid: true
-        },
-        {
-            id: '2',
-            vehicle: 'Maruti Swift',
-            plate: 'MH12CD5678',
-            customer: 'Priya Verma',
-            valet: 'Unassigned',
-            valetId: null,
-            location: 'Phoenix Mall',
-            subLocation: 'Lower Parel, Mumbai',
-            status: 'Parked',
-            entryTime: '19 Jan at 07:30 PM',
-            duration: '2h 45m',
-            payment: 100,
-            isPaid: false
+    const [editingValetId, setEditingValetId] = useState(null); // Session ID being edited
+    const [selectedNewValet, setSelectedNewValet] = useState(''); // Selected driver ID for reassignment
+
+    useEffect(() => {
+        fetchData();
+        fetchDrivers();
+    }, []);
+
+    const fetchData = async () => {
+        try {
+            const [statsRes, sessionsRes] = await Promise.all([
+                parkingService.getStats(),
+                parkingService.getAllSessions()
+            ]);
+
+            if (statsRes.data.success) {
+                setStats({
+                    active: statsRes.data.stats.active,
+                    retrieving: statsRes.data.stats.retrieving,
+                    totalToday: statsRes.data.stats.active + statsRes.data.stats.retrieving, // Or fetches from API
+                    revenue: statsRes.data.stats.revenue
+                });
+            }
+
+            if (sessionsRes.data.success) {
+                // Map backend data to frontend structure if needed
+                const mappedSessions = sessionsRes.data.sessions.map(s => ({
+                    id: s.id,
+                    vehicle: s.vehicle_model,
+                    plate: s.vehicle_number,
+                    customer: s.customer_name,
+                    valet: s.drivers?.name || 'Unassigned',
+                    valetId: s.valet_id,
+                    location: s.location,
+                    subLocation: 'Main Garage', // Placeholder or add to DB
+                    status: s.status,
+                    entryTime: new Date(s.entry_time).toLocaleString('en-US', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }),
+                    duration: getDuration(s.entry_time, s.exit_time),
+                    payment: s.fee,
+                    isPaid: s.is_paid
+                }));
+                setSessions(mappedSessions);
+            }
+        } catch (error) {
+            console.error("Failed to fetch dashboard data", error);
+        } finally {
+            setLoading(false);
         }
-    ]);
-
-    const handleReassign = (e) => {
-        e.preventDefault();
-        setEditingValetId(null);
-        alert('Valet reassigned successfully');
     };
+
+    const fetchDrivers = async () => {
+        try {
+            const { data } = await driverService.getAllDrivers();
+            setDrivers(data.drivers || []);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const getDuration = (start, end) => {
+        const startTime = new Date(start);
+        const endTime = end ? new Date(end) : new Date();
+        const diff = Math.floor((endTime - startTime) / 60000); // minutes
+        const hours = Math.floor(diff / 60);
+        const mins = diff % 60;
+        return `${hours}h ${mins}m`;
+    };
+
+    const handleReassign = async (sessionId) => {
+        if (!selectedNewValet) {
+            alert("Please select a valet");
+            return;
+        }
+
+        try {
+            await parkingService.reassignValet(sessionId, selectedNewValet);
+            alert('Valet reassigned successfully');
+            setEditingValetId(null);
+            setSelectedNewValet('');
+            fetchData(); // Refresh list
+        } catch (error) {
+            alert('Failed to reassign valet');
+        }
+    };
+
+    const filteredSessions = sessions.filter(s => {
+        if (activeTab === 'All') return true;
+        if (activeTab.includes('Parked')) return s.status === 'Parked';
+        if (activeTab.includes('Retrieving')) return s.status === 'Retrieving';
+        if (activeTab.includes('Retrieved')) return s.status === 'Completed';
+        return true;
+    });
 
     return (
         <div className="manager-container" style={{ background: '#f8f7fc', minHeight: '100%' }}>
@@ -117,10 +172,10 @@ function ManagerDashboard() {
 
                 {/* Tabs */}
                 <div className="filter-tabs">
-                    {['All (5)', 'Parked (3)', 'Retrieving (1)', 'Retrieved'].map(tab => (
+                    {['All', 'Parked', 'Retrieving', 'Retrieved'].map(tab => (
                         <button
                             key={tab}
-                            className={`filter-tab ${activeTab === tab ? 'active' : ''}`}
+                            className={`filter-tab ${activeTab.includes(tab) ? 'active' : ''}`}
                             onClick={() => setActiveTab(tab)}
                         >
                             {tab}
@@ -130,7 +185,7 @@ function ManagerDashboard() {
 
                 {/* List */}
                 <div className="vehicle-list">
-                    {sessions.map(session => (
+                    {filteredSessions.map(session => (
                         <div key={session.id} className="vehicle-card">
                             <div className="vehicle-header">
                                 <div className="vehicle-icon">
@@ -186,13 +241,25 @@ function ManagerDashboard() {
                             {(editingValetId === session.id) ? (
                                 <div className="reassign-section">
                                     <div className="reassign-label">Reassign to:</div>
-                                    <select className="reassign-select">
-                                        <option>Select new valet...</option>
-                                        <option>Rajesh Kumar</option>
-                                        <option>Suresh Singh</option>
+                                    <select
+                                        className="reassign-select"
+                                        value={selectedNewValet}
+                                        onChange={(e) => setSelectedNewValet(e.target.value)}
+                                    >
+                                        <option value="">Select new valet...</option>
+                                        {drivers.map(driver => (
+                                            <option key={driver.id} value={driver.id}>{driver.name}</option>
+                                        ))}
                                     </select>
                                     <div className="reassign-actions">
-                                        <button className="btn-cancel" onClick={() => setEditingValetId(null)}>Cancel</button>
+                                        <button className="btn-cancel" onClick={() => { setEditingValetId(null); setSelectedNewValet(''); }}>Cancel</button>
+                                        <button
+                                            className="btn-reassign-trigger"
+                                            style={{ background: '#10b981', color: 'white', border: 'none', marginLeft: '8px' }}
+                                            onClick={() => handleReassign(session.id)}
+                                        >
+                                            Confirm
+                                        </button>
                                     </div>
                                 </div>
                             ) : (

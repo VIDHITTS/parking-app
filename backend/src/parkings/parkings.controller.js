@@ -119,3 +119,23 @@ export const updateStatus = async (req, res) => {
         res.status(500).json({ success: false, error: error.message });
     }
 };
+
+export const reassignValet = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { valet_id } = req.body;
+
+        const { data, error } = await supabase
+            .from('parking_sessions')
+            .update({ valet_id })
+            .eq('id', id)
+            .select()
+            .single();
+
+        if (error) throw error;
+
+        res.json({ success: true, session: data });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+};

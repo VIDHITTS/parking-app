@@ -33,6 +33,7 @@ export const parkingService = {
     createSession: (data) => api.post('/parkings', data),
     getAllSessions: () => api.get('/parkings'),
     updateStatus: (id, status) => api.patch(`/parkings/${id}/status`, { status }),
+    reassignValet: (id, valetId) => api.patch(`/parkings/${id}/reassign`, { valet_id: valetId }),
     // Legacy support if needed, but we are pivoting
     createParking: (data) => api.post('/parkings', data),
     getAllParkings: () => api.get('/parkings'),

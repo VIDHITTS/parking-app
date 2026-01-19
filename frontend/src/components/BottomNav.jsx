@@ -65,7 +65,7 @@ function BottomNav() {
                     { path: '/history', label: 'History', icon: Icons.History },
                     { path: '/settings', label: 'Settings', icon: Icons.Settings },
                 ];
-            case 'SUPER_ADMIN': // Also hide bottom nav for Super Admin
+            case 'SUPER_ADMIN':
             case 'MANAGER':
             case 'DRIVER':
             default:
