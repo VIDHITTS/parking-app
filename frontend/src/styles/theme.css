@@ -63,16 +63,22 @@ body {
 @media (min-width: 768px) {
   body {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    /* Stack phone and role switcher vertically */
+    justify-content: flex-start;
+    /* Start from top */
     align-items: center;
-    padding: 40px 20px 140px;
-    /* Extra bottom padding for role switcher */
+    padding: 40px 20px;
     min-height: 100vh;
+    overflow-y: auto;
+    /* Allow body scroll on desktop */
   }
 
   .app-wrapper {
     max-width: 400px;
     height: 800px;
+    width: 400px;
+    /* Fixed width */
     min-height: auto;
     box-shadow: 0 0 40px rgba(0, 0, 0, 0.15);
     border: 12px solid #1f2937;
@@ -81,6 +87,8 @@ body {
     /* Clips children to rounded corners */
     position: relative;
     background: white;
+    flex-shrink: 0;
+    /* Prevent phone shrinking */
   }
 }
 

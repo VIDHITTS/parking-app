@@ -5,20 +5,22 @@
     border-top: 1px solid #e5e7eb;
     padding: 16px;
     z-index: 100;
-    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+    margin-top: 20px;
+    /* Space between phone and switcher */
 }
 
-/* Desktop: Position specifically below the phone wrapper */
+/* Desktop: Natural flow below the phone */
 @media (min-width: 768px) {
     .role-switcher-container {
-        position: fixed;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
+        position: relative;
+        /* Not fixed */
         width: 100%;
         max-width: 500px;
         border-radius: 20px;
         border: 1px solid #e5e7eb;
+        margin: 20px auto 0;
+        /* Center it */
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
 }
 
@@ -29,6 +31,7 @@
         bottom: 0;
         left: 0;
         right: 0;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
     }
 }
 
@@ -44,6 +47,8 @@
     display: flex;
     gap: 12px;
     justify-content: center;
+    flex-wrap: wrap;
+    /* Allow wrapping on small screens */
 }
 
 .role-option {
