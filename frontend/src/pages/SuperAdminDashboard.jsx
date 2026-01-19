@@ -2,10 +2,11 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { sitesService, driverService, parkingService } from '../services/api';
+import { getHomePathForRole } from '../App';
 import '../styles/SuperAdminDashboard.css';
 
 function SuperAdminDashboard() {
-    const { logout, user } = useAuth();
+    const { user } = useAuth();
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('Overview');
     const [sites, setSites] = useState([]);
@@ -95,7 +96,7 @@ function SuperAdminDashboard() {
             {/* Header */}
             <header className="super-admin-header">
                 <div className="header-top">
-                    <button className="back-btn" onClick={() => navigate(-1)}>
+                    <button className="back-btn" onClick={() => navigate(getHomePathForRole(user?.role))}>
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <path d="M19 12H5M12 19l-7-7 7-7" />
                         </svg>

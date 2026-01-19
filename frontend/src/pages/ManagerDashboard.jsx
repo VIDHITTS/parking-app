@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { parkingService } from '../services/api';
 import AddDriverModal from '../components/AddDriverModal';
 import { useAuth } from '../contexts/AuthContext';
+import { getHomePathForRole } from '../App';
 import '../styles/ManagerDashboard.css';
 
 function ManagerDashboard() {
-    const { logout } = useAuth();
+    const { user } = useAuth();
+    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('All');
     const [showAddDriver, setShowAddDriver] = useState(false);
     const [editingValetId, setEditingValetId] = useState(null); // ID of session being edited
@@ -63,7 +66,7 @@ function ManagerDashboard() {
             <header className="manager-header">
                 <div className="manager-nav">
                     <div className="nav-left">
-                        <button className="back-arrow" onClick={logout}>
+                        <button className="back-arrow" onClick={() => navigate(getHomePathForRole(user?.role))}>
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                 <path d="M19 12H5M12 19l-7-7 7-7" />
                             </svg>
